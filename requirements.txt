@@ -1,0 +1,23 @@
+-e git+https://github.com/Tinitto/ShoppingList.git@800d1b8afff081ad3205186d2a0a628524ed48e9#egg=app&subdirectory=flask_app
+asciinema==1.4.0
+astroid==1.5.3
+certifi==2017.7.27.1
+chardet==3.0.4
+click==6.7
+coverage==4.0.3
+Flask==0.12.2
+idna==2.6
+isort==4.2.15
+itsdangerous==0.24
+Jinja2==2.9.6
+lazy-object-proxy==1.3.1
+MarkupSafe==1.0
+mccabe==0.6.1
+nose==1.3.7
+pylint==1.7.2
+PyYAML==3.12
+requests==2.18.4
+six==1.10.0
+urllib3==1.22
+Werkzeug==0.12.2
+wrapt==1.10.11
