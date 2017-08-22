@@ -8,6 +8,7 @@ class User(db.Model):
     """
     A User is the owner of shopping lists
     """
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), nullable=False)
@@ -81,6 +82,7 @@ class User(db.Model):
         Allows user to delete a shopping
         list that they own
         """
+        pass
         #if not isinstance(shopping_list, ShoppingList):
         #    raise TypeError('Object is not a shopping list object')
         #if shopping_list not in self.shopping_lists:
@@ -90,7 +92,7 @@ class User(db.Model):
 
     def save(self):
         """
-        Saving to the database
+        Saving to the database. After initialization, call this def
         """
         db.session.add(self)
         db.session.commit()
