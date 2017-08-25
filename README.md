@@ -66,7 +66,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     ```json
     {
         "username": "any-you-want",
-        "name": : "Your name",
+        "name": "Your name",
         "email": "youremail@example.com",
         "password": "password"
     }
