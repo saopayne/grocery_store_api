@@ -20,7 +20,8 @@ class DevelopmentConfig(Config):
     """
     DEBUG = True
     SECRET = "development secret"
-    SQLALCHEMY_DATABASE_URI = "postgresql://startups:pass@localhost:5432/shopping_db"
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or\
+                 "postgresql://startups:pass@localhost:5432/shopping_db"
 
 
 class TestingConfig(Config):
