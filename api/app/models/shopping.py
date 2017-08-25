@@ -4,8 +4,14 @@ The module contains the following classes
  - ShoppingList
  - ShoppingItem
 """
-from app.models import utilities
+
+from flask import current_app
+from flask_bcrypt import Bcrypt
+import jwt
+from datetime import datetime, timedelta
+
 from app import db
+from app.models import utilities
 
 
 class User(db.Model):
@@ -15,9 +21,9 @@ class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
-    email = db.Column(db.String(120), nullable=False)
+    email = db.Column(db.String(256), nullable=False)
     name = db.Column(db.String(150), nullable=False)
-    password = db.Column(db.String(150), nullable=False)
+    password = db.Column(db.String(256), nullable=False)
     shopping_lists = db.relationship('ShoppingList', backref='owner',
                                     lazy='dynamic', cascade='all, delete-orphan')
 
@@ -28,7 +34,7 @@ class User(db.Model):
         if utilities.check_email_format(email):
             self.email = email
         if utilities.check_password_format(password):
-            self.password = password
+            self.password = Bcrypt().generate_password_hash(password).decode()
         if utilities.check_type(username, str,
             error_string="A user's username can only be a string"):
              self.username = username
@@ -41,6 +47,13 @@ class User(db.Model):
              error_string="A user's name can only be a string"):
              self.name = name
              db.session.commit()
+
+    def password_is_valid(self, password):
+        """
+        Checks whether the password passed matches with that on
+        record
+        """
+        return Bcrypt().check_password_hash(self.password, password)
 
     def set_username(self, username):
         """
@@ -67,7 +80,7 @@ class User(db.Model):
         """
         self.password = password
         if utilities.check_password_format(password):
-            self.password = password
+            self.password = Bcrypt().generate_password_hash(password).decode()
             db.session.commit()
 
     def create_shopping_list(self, title):
@@ -105,6 +118,44 @@ class User(db.Model):
         if not shopping_list.owner == self:
             raise KeyError('Shopping list does not exist')
         shopping_list.delete()
+
+    def generate_token(self, user_id):
+        """
+        Generate the token for token-based auth
+        """
+        try:
+            payload = {
+                'exp': datetime.utcnow() + timedelta(minutes=15),
+                'iat': datetime.utcnow(),
+                'sub': user_id
+            }
+
+            # create the token using the data above
+            token = jwt.encode(
+                payload,
+                current_app.config.get('SECRET'),
+                algprithm='HS256'
+            )
+
+            return token
+        except Exception as e:
+            return str(e)
+
+    @staticmethod
+    def decode_token(token):
+        """
+        Function to decode the token when supplied
+        """
+        try:
+            # decode using the app SECRET
+            payload = jwt.decode(token, current_app.config.get('SECRET'))
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            # in case token is expired
+            return 'Token has expired. Login again to receive new token.'
+        except jwt.InvalidTokenError:
+            # in case the token is invalid
+            return 'Token is invalid. Try to login.'
 
     def save(self):
         """
