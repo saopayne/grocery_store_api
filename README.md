@@ -49,7 +49,7 @@ It also enables users to share such lists with other people for example if the s
 
 4. run command in the folder ShoppingListAPI
 
-    ``` sh -c 'cd ./api/ && coverage run-m --source=app unittest discover test && coverage report' ```
+    ``` sh -c 'cd ./api/ && coverage run -m --source=app unittest discover test && coverage report' ```
 
 5. Observe the output in your terminal
 
