@@ -15,4 +15,4 @@ before_script:
   - psql -c "CREATE USER startups WITH PASSWORD 'pass';" -U postgres
   - psql -c "grant all privileges on database shopping_test_db to startups;" -U postgres
   - psql -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO startups;' -U postgres
-script:  sh -c 'cd ./api/ && coverage run -m --source=app unittest discover test && coverage report'
+script:  sh -c 'cd ./api/ python manage.py test'
