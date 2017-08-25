@@ -53,9 +53,61 @@ class RegistrationView(MethodView):
 
             return make_response(jsonify(response)), 202
 
+class LoginView(MethodView):
+    """
+    This view handles user login and access token generation at auth/login
+    """
+
+    def post(self):
+        """Handle POST request for this view."""
+
+        # get json data even if content_type is not 'application/json'
+        post_data = request.get_json(force=True)
+        try:
+            # Get the user object using their username
+            user = User.query.filter_by(username=post_data['username']).first()
+
+            # Try to authenticate the found user using their password
+            if user and user.password_is_valid(post_data['password']):
+                # Generate the access token to be used for future authentication
+                access_token = user.generate_token(user.id)
+                if access_token:
+                    response = {
+                        'message': 'Login successful',
+                        'access_token': access_token.decode()
+                    }
+                    return make_response(jsonify(response)), 200
+            else:
+                # raise ValueError('this is the user %s' % str(user))
+                # user does not exist or password is invalid
+                response = {
+                    'message': 'Invalid username or password. Try again'
+                }
+                return make_response(jsonify(response)), 401
+
+        except Exception as e:
+            # Create a response containing an string error message
+            response = {
+                'message': str(e)
+            }
+            # HTTP Error Code 500 (Internal Server Error)
+            return make_response(jsonify(response)), 500
+
+
 # register the view as part of the auth blueprint
 registration_view = RegistrationView.as_view('register_view')
+login_view = LoginView.as_view('login_view')
+
+# /auth/register endpoint
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=registration_view,
-    methods=['POST'])
+    methods=['POST']
+    )
+
+# /auth/login endpoint
+auth_blueprint.add_url_rule(
+    '/auth/login',
+    view_func=login_view,
+    methods=['POST']
+    )
