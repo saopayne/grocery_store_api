@@ -39,11 +39,13 @@ class AuthTestClass(unittest.TestCase):
         Test that an anonymous user can register successfully
         """
         with self.app.app_context():
-            response = self.client().post('auth/register', data=json.dumps(self.user_data))
+            response = self.client().post('auth/register', 
+                             data=json.dumps(self.user_data))
             # convert the json response to an object
             result = json.loads(response.data.decode())
             # the user should be successfully registered
-            self.assertEqual(result['message'], 'User registration successful')
+            self.assertEqual(result['message'], 
+                            'User registration successful')
             self.assertEqual(response.status_code, 201)
 
     def test_cannot_register_twice(self):
@@ -51,12 +53,55 @@ class AuthTestClass(unittest.TestCase):
         Test that a user cannot be registered twice
         """
         with self.app.app_context():
-            result = self.client().post('/auth/register', data=json.dumps(self.user_data))
+            result = self.client().post('/auth/register',
+                                 data=json.dumps(self.user_data))
             self.assertEqual(result.status_code, 201)
             # register user again
-            second_response = self.client().post('/auth/register', data=json.dumps(self.user_data))
+            second_response = self.client().post('/auth/register',
+                                         data=json.dumps(self.user_data))
             self.assertEqual(second_response.status_code, 202)
             # get the results returned in json format
             result = json.loads(second_response.data.decode())
             self.assertEqual(
                 result['message'], "User already exists. Please login")
+
+    def test_user_login(self):
+        """
+        Test if a user can log in
+        """
+        with self.app.app_context():
+            # first register the user
+            response = self.client().post('/auth/register',
+                                 data=json.dumps(self.user_data))
+            self.assertEqual(response.status_code, 201)
+
+            # then log in
+            login_details = dict(username=self.user_data['username'],
+                                password=self.user_data['password'])
+            response = self.client().post('/auth/login', 
+                                    data=json.dumps(login_details))
+            result = json.loads(response.data.decode())
+            # You should have a success message
+            self.assertEqual(result['message'], 'Login successful')
+            # the status code should also be 200
+            self.assertEqual(response.status_code, 200)
+            # a token should also be present
+            self.assertTrue(result['access_token'])
+
+    def test_non_registered_user_login(self):
+        """
+        A non registered user should not be logged in
+        """
+        with self.app.app_context():
+            # login without registering first
+            login_details = dict(username=self.user_data['username'],
+                                password=self.user_data['password'])
+            response = self.client().post('/auth/login', 
+                                    data=json.dumps(login_details))
+            result = json.loads(response.data.decode())
+            # You should have a success message
+            self.assertEqual(result['message'], 'Invalid username or password. Try again')
+            # the status code should also be 401
+            self.assertEqual(response.status_code, 401)
+            # a token should also be absent
+            self.assertNotIn('access_token', result.keys())

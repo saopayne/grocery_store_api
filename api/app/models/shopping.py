@@ -134,12 +134,12 @@ class User(db.Model):
             token = jwt.encode(
                 payload,
                 current_app.config.get('SECRET'),
-                algprithm='HS256'
+                algorithm='HS256'
             )
 
             return token
         except Exception as e:
-            return str(e)
+            raise e
 
     @staticmethod
     def decode_token(token):
