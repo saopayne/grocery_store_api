@@ -52,3 +52,48 @@ It also enables users to share such lists with other people for example if the s
     ``` sh -c 'cd ./api/ && coverage run-m --source=app unittest discover test && coverage report' ```
 
 5. Observe the output in your terminal
+
+## Demo
+The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.com](https://shoppinglist-rest-andela.herokuapp.com)
+
+### Current endpoints
+1.  Register user
+    ```
+    /auth/register
+    ``` 
+        
+    example POST payload :
+    ```json
+    {
+        "username": "any-you-want",
+        "name": :Your name",
+        "email": "youremail@example.com",
+        "password": "password"
+    }
+    ```
+2.  Login
+    ```
+    /auth/login
+    ``` 
+        
+    example POST payload :
+    ```json
+    {
+        "username": "any-you-want",
+        "password": "password"
+    }
+    ```
+
+### Endpoints in the pipeline
+1. ``` /auth/logout ```  
+    Methods = [POST]
+2. ``` /auth/reset-password ```
+    Methods = [POST]
+3. ``` /shoppinglists/ ```
+    Methods = [GET, POST]
+4. ``` /shoppinglists/<id> ```
+    Methods = [GET, PUT, DELETE]
+5. ``` /shoppinglists/<id>/items/ ```
+    Methods = [POST]
+6. ``` /shoppinglists/<id>/items/<item_id> ```
+    Methods = [PUT, DELETE]
