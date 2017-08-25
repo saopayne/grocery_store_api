@@ -101,8 +101,10 @@ class UserModelTest(unittest.TestCase):
         """
         new_password = 'password123'
         with self.app.app_context():
+            old_password = self.user.password
             self.user.set_password(new_password)
-            self.assertEqual(new_password, self.user.password)
+            self.assertTrue(self.user.password_is_valid(new_password))
+            self.assertFalse(self.user.password_is_valid(old_password))
 
     def test_user_create_shoppinglist(self):
         """
