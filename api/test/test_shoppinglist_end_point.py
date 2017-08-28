@@ -76,7 +76,7 @@ class ShoppingListEndPointTest(unittest.TestCase):
         """
         allowed_methods = ('PUT', 'POST')
         invalid_data_message = 'The data you sent was in the wrong structure'
-        with app.app_context():
+        with self.app.app_context():
             if method in allowed_methods and (isinstance(invalid_data, dict)
              or not invalid_data) and isinstance(url, str) and isinstance(access_token, str):
                 # sending invalid data, return message error and 400
@@ -101,7 +101,7 @@ class ShoppingListEndPointTest(unittest.TestCase):
         get_or_delete = ('GET', 'DELETE')
         unauthorized_access_message = 'You do not have the appropriate permissions'
         if method in post_or_put and isinstance(data, dict) and isinstance(url, str):
-            with app.app_context():
+            with self.app.app_context():
                 # sending data without appropriate auth, return message error and 403
                 on_unauthorized_request = self.make_request(method, url,
                                 headers=dict(Authorization='Bearer ' + 'random string'),
@@ -112,8 +112,8 @@ class ShoppingListEndPointTest(unittest.TestCase):
                                                 on_unauthorized_request.data.decode())
                 self.assertEqual(unauthorized_request_response['message'],
                                     unauthorized_access_message)
-        if method in get_or_delete and isinstance(url, str):
-            with app.app_context():
+        elif method in get_or_delete and isinstance(url, str):
+            with self.app.app_context():
                 # this does not need data to be anything but None
                 # an error message is returned and a status code of 403
                 on_unauthorized_request = self.make_request(method, url,
@@ -129,7 +129,7 @@ class ShoppingListEndPointTest(unittest.TestCase):
 
     def test_shoppinglist_create(self):
         """
-        Test that a ShoppingList object can be
+        Test that a ShoppingList object can be \
         created (POST) to /shoppinglists/
         """
         with self.app.app_context():
@@ -178,7 +178,7 @@ class ShoppingListEndPointTest(unittest.TestCase):
             self.assertEqual(on_edit_list.status_code, 200)
             # get the specified shopping list by id: assume this works fine
             modified_shopping_list = self.client().get(
-                '/shoppinglists/{}'.format(on_create['id']),
+                '/shoppinglists/{}'.format(new_shopping_list_details['id']),
                 headers=dict(Authorization="Bearer " + access_token))
             # convert the response to a dict
             modified_list_dict = json.loads(modified_shopping_list.data.decode())
@@ -210,25 +210,28 @@ class ShoppingListEndPointTest(unittest.TestCase):
             new_shopping_list_dict = json.loads(new_shopping_list.data.decode())
             # show it exists by retrieving it by id
             shopping_list = self.client().get(
-                '/shoppinglist/{}'.format(new_shopping_list_dict['id']),
+                '/shoppinglists/{}'.format(new_shopping_list_dict['id']),
                 headers=dict(Authorization="Bearer " + access_token))
-            self.assertEqual(shopping_list.status_code, 200)
+            try:
+                self.assertEqual(shopping_list.status_code, 200)
+            except AssertionError:
+                raise AssertionError('This is the data %s' % str(shopping_list))
             # try deleting with no proper authentication. 403 is expected
-            self.unauthorized_request(url='/shoppinglist/{}'.\
+            self.unauthorized_request(url='/shoppinglists/{}'.\
                     format(new_shopping_list_dict['id']), method='DELETE')
             # delete it, return 200 ok status
             on_delete = self.client().delete(
-                '/shoppinglist/{}'.format(new_shopping_list_dict['id']),
+                '/shoppinglists/{}'.format(new_shopping_list_dict['id']),
                 headers=dict(Authorization="Bearer " + access_token))
             self.assertEqual(on_delete.status_code, 200)
             # show that it no longer exists, return 404 status
             shopping_list = self.client().get(
-                '/shoppinglist/{}'.format(new_shopping_list_dict['id']),
+                '/shoppinglists/{}'.format(new_shopping_list_dict['id']),
                 headers=dict(Authorization="Bearer " + access_token))
             self.assertEqual(shopping_list.status_code, 404)
             # delete an object that doesn't exist, return 404 status
             on_delete = self.client().delete(
-                '/shoppinglist/{}'.format(new_shopping_list_dict['id']),
+                '/shoppinglists/{}'.format(new_shopping_list_dict['id']),
                 headers=dict(Authorization="Bearer " + access_token))
             self.assertEqual(on_delete.status_code, 404)
 
@@ -248,15 +251,15 @@ class ShoppingListEndPointTest(unittest.TestCase):
             # convert the data received to dict
             new_shopping_list_details = json.loads(on_create_list.data.decode())
             single_list_response = self.client().get(
-                '/shoppinglist/{}'.format(new_shopping_list_details['id']),
+                '/shoppinglists/{}'.format(new_shopping_list_details['id']),
                 headers=dict(Authorization="Bearer " + access_token))
             self.assertEqual(single_list_response.status_code, 200)
             # convert the data recieved into an dict
-            retrieved_shopping_list = json.loads(single_list_response.data.decode)
+            retrieved_shopping_list = json.loads(single_list_response.data.decode())
             self.assertEqual(self.shoppinglist_data['title'],
                             retrieved_shopping_list['title'])
             # attempt to retrieve the data without proper authentication
-            self.unauthorized_request(url='/shoppinglist/{}'.\
+            self.unauthorized_request(url='/shoppinglists/{}'.\
                 format(new_shopping_list_details['id']), method='GET')
 
     def test_get_all_shoppinglists(self):
@@ -271,21 +274,21 @@ class ShoppingListEndPointTest(unittest.TestCase):
                 headers=dict(Authorization="Bearer " + access_token),
                 data=json.dumps(self.shoppinglist_data))
             self.assertEqual(first_shopping_list.status_code, 201)
-            first_shopping_list_dict = json.loads(first_shopping_list.data.decode)
+            first_shopping_list_dict = json.loads(first_shopping_list.data.decode())
             # create another ShoppingList by making another POST request
             second_shopping_list = self.client().post(
                 '/shoppinglists/',
                 headers=dict(Authorization="Bearer " + access_token),
                 data=json.dumps({'title': 'Academics'}))
             self.assertEqual(second_shopping_list.status_code, 201)
-            second_shopping_list_dict = json.loads(second_shopping_list.data.decode)        
+            second_shopping_list_dict = json.loads(second_shopping_list.data.decode())        
             # get a list of all ShoppingLists that belong to the test user 
             # by making a GET request
             all_shopping_lists = self.client().get(
                 '/shoppinglists/',
                 headers=dict(Authorization="Bearer " + access_token),
             )
-            all_shopping_lists_list = json.loads(all_shopping_lists.data.decode)
+            all_shopping_lists_list = json.loads(all_shopping_lists.data.decode())
             self.assertEqual(all_shopping_lists.status_code, 200)
             self.assertIn(first_shopping_list_dict, all_shopping_lists_list)
             self.assertIn(second_shopping_list_dict, all_shopping_lists_list)        
