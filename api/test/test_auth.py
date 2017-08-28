@@ -48,6 +48,8 @@ class AuthTestClass(unittest.TestCase):
                             'User registration successful')
             self.assertEqual(response.status_code, 201)
 
+            # sending invalid data, return message error and 400
+
     def test_cannot_register_twice(self):
         """
         Test that a user cannot be registered twice
@@ -88,6 +90,8 @@ class AuthTestClass(unittest.TestCase):
             # a token should also be present
             self.assertTrue(result['access_token'])
 
+            # sending invalid data, return message error and 400
+
     def test_non_registered_user_login(self):
         """
         A non registered user should not be logged in
@@ -105,3 +109,6 @@ class AuthTestClass(unittest.TestCase):
             self.assertEqual(response.status_code, 401)
             # a token should also be absent
             self.assertNotIn('access_token', result.keys())
+
+# there is need for a blacklist models
+# there is need for logout tests
