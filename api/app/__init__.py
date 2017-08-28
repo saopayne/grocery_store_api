@@ -30,6 +30,8 @@ def create_app(config_name):
         the token that is passed
         """
         auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return None
         access_token = auth_header.split(" ")[1]
         user = None
         if not access_token:
