@@ -137,4 +137,29 @@ class ShoppingParentTestClass(unittest.TestCase):
                 return data_got['access_token']
             except KeyError:
                 raise KeyError('"access_token" is not a key. This is the data %s' % data_got)
+
+    def create_shopping_list(self, access_token, shoppinglist_data=None):
+        """
+        A helper method to create a shopping list
+        """
+        if not shoppinglist_data:
+            shoppinglist_data = self.shoppinglist_data
+        with self.app.app_context():
+            # create ShoppingList via post
+            on_create = self.client().post('/shoppinglists/',
+                        headers=dict(Authorization='Bearer ' + access_token),
+                        data=json.dumps(shoppinglist_data)
+                        )
+            return json.loads(on_create.data.decode())['id'], on_create
             
+    def make_get_request(self, url, access_token):
+        """
+        Helper method to make get requests
+        """
+        if url and access_token:
+            with self.app.app_context():
+                response = self.client().get(url, 
+                headers=dict(Authorization="Bearer " + access_token))
+                return response
+        else:
+            raise ValueError('Invalid arguments for make_get_request')

@@ -15,26 +15,14 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
     model are tested here
     """
 
-    def create_shopping_list(self, access_token, title='Groceries',
-        description='Groceries and Home stuff'):
-        """
-        A helper method to create a shopping list
-        """
-        with self.app.app_context():
-            # create ShoppingList via post
-            on_create = self.client().post('/shoppinglists/',
-                        headers=dict(Authorization='Bearer ' + access_token),
-                        data=json.dumps(self.shoppinglist_data)
-                        )
-            return json.loads(on_create.data.decode())['id']
-
     def test_view_all_items(self):
         """
         All items of a shopping list can be viewed
         """
         with self.app.app_context():
             access_token = self.get_default_token()
-            shoppinglist_id = self.create_shopping_list(access_token)
+            shoppinglist_id, on_create = self.create_shopping_list(access_token)
+            self.assertEqual(on_create.status_code, 201)
             first_item_data = {
                 'name': 'guavas',
                 'quantity': 7,
@@ -78,7 +66,8 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
         with self.app.app_context():
             # create a shopping list
             access_token = self.get_default_token()
-            shoppinglist_id = self.create_shopping_list(access_token)
+            shoppinglist_id, on_create = self.create_shopping_list(access_token)
+            self.assertEqual(on_create.status_code, 201)
             # create a single item: assume this works fine
             item_creation_response = self.client().post('/shoppinglists/{}/items/'.\
                                             format(shoppinglist_id),
@@ -115,7 +104,8 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
         with self.app.app_context():
             # create a shopping list
             access_token = self.get_default_token()
-            shoppinglist_id = self.create_shopping_list(access_token)
+            shoppinglist_id, on_create = self.create_shopping_list(access_token)
+            self.assertEqual(on_create.status_code, 201)
             # create a single item: assume this works fine
             item_creation_response = self.client().post('/shoppinglists/{}/items/'.\
                                             format(shoppinglist_id),
@@ -155,7 +145,8 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
         with self.app.app_context():
             # create a shopping list
             access_token = self.get_default_token()
-            shoppinglist_id = self.create_shopping_list(access_token)
+            shoppinglist_id, on_create = self.create_shopping_list(access_token)
+            self.assertEqual(on_create.status_code, 201)
             # create a single item: assume this works fine
             item_creation_response = self.client().post('/shoppinglists/{}/items/'.\
                                             format(shoppinglist_id),
