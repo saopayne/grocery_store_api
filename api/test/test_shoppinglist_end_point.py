@@ -14,6 +14,18 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
     All endpoints directly interacting with the ShoppingList
     model are tested here
     """
+    def delete_shopping_list(self, access_token, shoppinglist_id):
+        """
+        Helper method to delete a shopping list
+        """
+        if access_token and shoppinglist_id:
+            with self.app.app_context():
+                response = self.client().delete('shoppinglists/{}'.format(shoppinglist_id),
+                headers=dict(Authorization="Bearer " + access_token))
+                return response
+        else:
+            raise ValueError('Invalid arguments for delete_shopping_list')
+
     def test_shoppinglist_create(self):
         """
         Test that a ShoppingList object can be \
@@ -96,9 +108,8 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             self.unauthorized_request(url='/shoppinglists/{}'.\
                     format(shoppinglist_id), method='DELETE')
             # delete it, return 200 ok status
-            on_delete = self.client().delete(
-                '/shoppinglists/{}'.format(shoppinglist_id),
-                headers=dict(Authorization="Bearer " + access_token))
+            on_delete = self.delete_shopping_list(access_token=access_token,
+                shoppinglist_id=shoppinglist_id)
             self.assertEqual(on_delete.status_code, 200)
             # show that it no longer exists, return 404 status
             shopping_list = self.make_get_request(
@@ -106,9 +117,8 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
                 access_token=access_token)
             self.assertEqual(shopping_list.status_code, 404)
             # delete an object that doesn't exist, return 404 status
-            on_delete = self.client().delete(
-                '/shoppinglists/{}'.format(shoppinglist_id),
-                headers=dict(Authorization="Bearer " + access_token))
+            on_delete = self.delete_shopping_list(access_token=access_token,
+                shoppinglist_id=shoppinglist_id)
             self.assertEqual(on_delete.status_code, 404)
 
     def test_get_shoppinglist_by_id(self):
