@@ -158,13 +158,169 @@ def create_app(config_name):
             return make_response(jsonify(
                     {'message': 'Shopping list successfully deleted'})), 200
             
-        if request.method == 'GET':
-            # Anyone is allowed to view these
+        if request.method == 'GET' and user:
+            # Anyone authenticated is allowed to view these
             response = {
                 'id': shoppinglist.id,
                 'title': shoppinglist.title,
                 'description': shoppinglist.description
             }
+            return make_response(jsonify(response)), 200
+
+    @app.route('/shoppinglists/<int:id>/items/', methods=['GET', 'POST'])
+    def all_items_of_shoppinglist(id):
+        """
+        Route for viewing and and adding items to a shoppinglist
+        """
+        unauthorized_data = {'message':'You do not have the appropriate permissions'} # 403
+        non_existent_shoppinglist = {'message': 'The shopping list does not exist'}
+        user = get_authenticated_user(request)
+        if not user:
+            # User is not authenticated
+            return make_response(jsonify(unauthorized_data)), 403
+
+        # try to get the shoping list
+        shoppinglist = ShoppingList.query.get(int(id))
+        if not shoppinglist:
+            # shoppinglist does not exist
+            return make_response(jsonify(non_existent_shoppinglist)), 404
+        if request.method == 'POST' and user:
+            # get the data from the request
+            received_data = request.get_json(force=True)
+
+            if received_data:
+                # try to get the approriate values
+                # expected {'name':'the name', 'quantity':'the quantity', 
+                # 'unit':'the unit'}
+                name = ''
+                quantity = 0
+                unit = 'units'
+
+                keys_of_receieved_data = received_data.keys()
+                if 'name' in keys_of_receieved_data:
+                    name = received_data['name']
+                if 'quantity' in keys_of_receieved_data:
+                    quantity = received_data['quantity']
+                if 'unit' in keys_of_receieved_data:
+                    unit = received_data['unit']
+                if len(name) > 0:
+                    # the name should not be empty
+                    # create the shoppingitem with the shoppinglist as the pasrent_list
+                    shoppingitem = ShoppingItem(name=name, quantity=quantity,
+                    parent_list=shoppinglist, unit=unit)
+                    shoppingitem.save()
+                    response = jsonify({
+                        'id': shoppingitem.id,
+                        'name': shoppingitem.name,
+                        'quantity': shoppingitem.quantity,
+                        'unit': shoppingitem.unit
+                    })
+                    return make_response(response), 201
+
+                else:
+                    return make_response(jsonify(
+                        {'message':'The data you sent was in the wrong structure'})), 400
+            else:
+                return make_response(jsonify({'message':'no data was sent'}))
+
+        if request.method == 'GET' and user:
+            # get all the items that belong to the list
+            items = shoppinglist.get_shopping_items()
+            response = []
+            for item in items:
+                obj = {
+                    'id': item.id,
+                    'name': item.name,
+                    'quantity': item.quantity,
+                    'unit': item.unit
+                }
+                response.append(obj)
+            return make_response(jsonify(response)), 200
+
+    @app.route('/shoppinglists/<int:id>/items/<int:item_id>',
+     methods=['GET', 'PUT', 'DELETE'])
+    def single_shoppingitem(id, item_id):
+        """
+        The route for editting, deleting, viewing a single shoppingitem
+        """
+        unauthorized_data = {'message':'You do not have the appropriate permissions'} # 403
+        non_existent_shoppinglist = {'message': 'The shopping list does not exist'}
+        non_existent_shoppingitem = {'message': 'The shopping item does not exist'}
+        user = get_authenticated_user(request)
+        if not user:
+            # User is not authenticated
+            return make_response(jsonify(unauthorized_data)), 403
+
+        # try to get the shopping list
+        shoppinglist = ShoppingList.query.get(int(id))
+        if not shoppinglist:
+            # shoppinglist does not exist
+            return make_response(jsonify(non_existent_shoppinglist)), 404
+
+        # try getting the shopping item
+        shoppingitem = ShoppingItem.query.get(int(item_id))
+        if not shoppingitem or not shoppingitem.parent_list == shoppinglist:
+            return make_response(jsonify(non_existent_shoppingitem)), 404
+
+        if request.method == 'PUT' and shoppinglist.owner == user:
+            # only owners are allowed to edit the item
+            # get the request data
+            # update the shopping item
+            received_data = request.get_json(force=True)
+
+            if received_data:
+                # try to get the approriate values
+                # expected {'name':'the name', 'quantity':'the quantity', 'unit':'the unit'}
+                name = ''
+                quantity = '',
+                unit = ''
+                keys_of_receieved_data = received_data.keys()
+
+                if 'name' not in keys_of_receieved_data and 'quantity' not in \
+                    keys_of_receieved_data and 'unit' not in keys_of_receieved_data:
+                    return make_response(jsonify(
+                            {'message':'The data you sent was in the wrong structure'})), 400
+
+                if 'name' in keys_of_receieved_data:
+                    name = received_data['name']
+                    if len(name) > 0:
+                        # make sure the name is never blank
+                        shoppingitem.set_name(name)
+                if 'quantity' in keys_of_receieved_data:
+                    shoppingitem.set_quantity(received_data['quantity'])
+                if 'unit' in keys_of_receieved_data:
+                    shoppingitem.set_unit(received_data['unit'])
+                # save the updated shopping list
+                shoppingitem.save()
+                response = {
+                    'id': shoppingitem.id,
+                    'name': shoppingitem.name,
+                    'quantity': shoppingitem.quantity,
+                    'unit': shoppingitem.unit
+                }
+                return make_response(jsonify(response)), 200
+            else: # if  no data provided
+                return make_response(jsonify({'message':'no data was sent'})), 400
+
+        
+        if request.method == 'DELETE' and shoppinglist.owner == user:
+            # only owners of the parent list are allowed to delete an item
+            # attempt to delete the item
+            shoppingitem.delete()
+            # send success message
+            return make_response(jsonify(
+                    {'message': 'Shopping item successfully deleted'})), 200
+        
+        if request.method == 'GET' and user:
+            # any one authenticated is allowed to view the items of the list
+            # form the response object
+            response = {
+                'id': shoppingitem.id,
+                'name': shoppingitem.name,
+                'quantity': shoppingitem.quantity,
+                'unit': shoppingitem.unit
+            }
+            # send the data
             return make_response(jsonify(response)), 200
 
 
