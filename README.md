@@ -58,7 +58,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
 ### Current endpoints
 
-#### 1. Register user
+1. **Register user**
 
     endpoint:
     ```
@@ -74,9 +74,10 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
         "password": "password"
     }
     ```
-#### 2.  Login
+2.  **Login** 
 
     endpoint:
+
     ```
     /auth/login
     ``` 
@@ -89,7 +90,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-#### 3.  Shoppinglists
+3.  **Shoppinglists**
 
     endpoint:
     ```
@@ -111,7 +112,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-#### 4.  Single Shoppinglist
+4.  **Single Shoppinglist**
 
     endpoint:
     ```
@@ -133,7 +134,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-#### 5.  Items of a Shoppinglist
+5.  **Items of a Shoppinglist**
 
     endpoint:
     ```
@@ -156,7 +157,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-#### 6.  Single Item of Shoppinglist
+6.  **Single Item of Shoppinglist**
 
     endpoint:
     ```
