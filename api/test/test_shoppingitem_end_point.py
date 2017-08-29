@@ -6,7 +6,6 @@ to the ShoppingItem model
 import unittest
 import json
 from app.models.shopping import User, ShoppingList, ShoppingItem
-from app import create_app, db
 from .common_functions import ShoppingParentTestClass
 
 

@@ -58,6 +58,8 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
 ### Current endpoints
 1.  Register user
+
+    endpoint:
     ```
     /auth/register
     ``` 
@@ -72,6 +74,8 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 2.  Login
+
+    endpoint:
     ```
     /auth/login
     ``` 
@@ -84,16 +88,99 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
+3.  Shoppinglists
+
+    endpoint:
+    ```
+     /shoppinglists/
+    ``` 
+
+    Methods = ['POST', 'GET']
+
+    Authentication header
+    ```
+    Authorization: Bearer <your access token>
+    ```
+        
+    example POST payload :
+    ```json
+    {
+        "title": "your new shoppinglist title",
+        "description": "whatever description"
+    }
+    ```
+
+3.  Single Shoppinglist
+
+    endpoint:
+    ```
+     /shoppinglists/<id>
+    ``` 
+
+    Methods = ['PUT', 'GET', 'DELETE']
+
+    Authentication header:
+    ```
+    Authorization: Bearer <your access token>
+    ```
+        
+    example PUT payload :
+    ```json
+    {
+        "title": "your modified shoppinglist title",
+        "description": "whatever new description"
+    }
+    ```
+
+4.  Items of a Shoppinglist
+
+    endpoint:
+    ```
+     /shoppinglists/<id>/items/
+    ``` 
+
+    Methods = ['POST', 'GET']
+
+    Authentication header:
+    ```
+    Authorization: Bearer <your access token>
+    ```
+        
+    example POST payload :
+    ```json
+    {
+        "name": "name of new item",
+        "quantity": 50,
+        "unit": "baskets"
+    }
+    ```
+
+5.  Single Item of Shoppinglist
+
+    endpoint:
+    ```
+     /shoppinglists/<id>/items/<item_id>
+    ``` 
+
+    Methods = ['PUT', 'GET', 'DELETE']
+
+    Authentication header:
+    ```
+    Authorization: Bearer <your access token>
+    ```
+        
+    example PUT payload :
+    ```json
+    {
+        "name": "modified name of item",
+        "quantity": 500,
+        "unit": "tonnes"
+    }
+    ```
+
+
 ### Endpoints in the pipeline
 1. ``` /auth/logout ```  
     Methods = [POST]
 2. ``` /auth/reset-password ```
     Methods = [POST]
-3. ``` /shoppinglists/ ```
-    Methods = [GET, POST]
-4. ``` /shoppinglists/<id> ```
-    Methods = [GET, PUT, DELETE]
-5. ``` /shoppinglists/<id>/items/ ```
-    Methods = [POST]
-6. ``` /shoppinglists/<id>/items/<item_id> ```
-    Methods = [PUT, DELETE]
