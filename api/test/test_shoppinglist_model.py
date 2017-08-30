@@ -4,24 +4,13 @@ This includes the tests for the ShoppingList model
 
 
 import unittest
-from app import create_app, db
-from app.models.shopping import User, ShoppingList, ShoppingItem
+from app.models.shopping import ShoppingList, ShoppingItem
+from .common_functions import BaseModelTestClass
 
-class ShoppingListModelTest(unittest.TestCase):
+class ShoppingListModelTest(BaseModelTestClass):
     """
     All tests on the ShoppingList model plus a user object
     """
-    def setUp(self):
-        """
-        Initialize the app, db
-        """
-        self.app = create_app(config_name='testing')
-        with self.app.app_context():
-            db.create_all()
-            self.user = User('John Doe', 'john@example.com',
-                                 'password', 'johndoe') 
-            self.shopping_list = ShoppingList('Groceries',
-                        'family daily grocery shopping list', owner=self.user)
 
     def test_owner_should_be_user(self):
         """
@@ -127,15 +116,6 @@ class ShoppingListModelTest(unittest.TestCase):
             with self.app.app_context():
                 shopping_item = self.shopping_list.add_item('apples')
                 self.assertEqual(shopping_item, self.user.get_shopping_item_by_name('apples'))
-
-
-    def tearDown(self):
-        """
-        Do cleanup of test database
-        """
-        with self.app.app_context():
-            db.session.remove
-            db.drop_all()
 
 
 if __name__ == '__main__':

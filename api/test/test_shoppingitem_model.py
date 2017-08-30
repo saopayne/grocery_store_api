@@ -4,27 +4,14 @@ This includes the tests for the ShoppingItem model
 
 
 import unittest
-from app import create_app, db
-from app.models.shopping import User, ShoppingList, ShoppingItem
+from app.models.shopping import ShoppingItem
+from .common_functions import BaseModelTestClass
 
 
-class ShoppingItemModelTest(unittest.TestCase):
+class ShoppingItemModelTest(BaseModelTestClass):
     """
     All tests on the ShoppingItem model
     """
-    def setUp(self):
-        """
-        Initialize the app, db
-        """
-        self.app = create_app(config_name='testing')
-        with self.app.app_context():
-            db.create_all()
-            self.user = User('John Doe', 'john@example.com',
-                                 'password', 'johndoe') 
-            self.shopping_list = ShoppingList('Groceries',
-                        'family daily grocery shopping list', owner=self.user)
-            self.shopping_item = ShoppingItem('fruit', 5, 'units',
-                                    parent_list=self.shopping_list)
 
     def test_item_quantity_is_number(self):
         """
@@ -44,7 +31,7 @@ class ShoppingItemModelTest(unittest.TestCase):
         self.assertRaises(TypeError, self.shopping_item.set_name,
             {'name':'string is expected, not dict'})
     
-    def test_parent_list_should_be_shoppinglist(self):
+    def test_parent_is_shoppinglist(self):
         """
         On initialization, the parent_list argument should be of
         ShoppingList type and not None
@@ -92,14 +79,6 @@ class ShoppingItemModelTest(unittest.TestCase):
             self.shopping_item.set_unit(new_unit)
             self.assertEqual(new_unit, self.shopping_item.unit)
     
-    def tearDown(self):
-        """
-        Do cleanup of test database
-        """
-        with self.app.app_context():
-            db.session.remove
-            db.drop_all()
-
 
 if __name__ == '__main__':
     unittest.main()
