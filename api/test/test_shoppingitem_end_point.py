@@ -8,6 +8,8 @@ import json
 from app.models.shopping import User, ShoppingList, ShoppingItem
 from .common_functions import ShoppingParentTestClass
 
+# add tests for when user is logged out
+
 
 class ShoppingItemEndPointTest(ShoppingParentTestClass):
     """
@@ -120,8 +122,13 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
                 'title': 'this should be name'
             }
             self.invalid_data_request(url='/shoppinglists/{}/items/'.format(shoppinglist_id), 
-                method='POST', invalid_data=invalid_data, access_token=access_token)      
-        
+                method='POST', invalid_data=invalid_data, access_token=access_token)  
+            # test for logged out requests (POST and GET)
+            self.make_logged_out_request(access_token=access_token, data=self.shoppingitem_data,
+                url='/shoppinglists/{}/items/'.format(shoppinglist_id), method='POST')  
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}/items/{}'.format(shoppinglist_id, item_id), method='GET')
+          
     def test_edit_item(self):
         """
         Editing the details of an item
@@ -159,6 +166,11 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
             self.invalid_data_request(url='/shoppinglists/{}/items/{}'.\
                 format(shoppinglist_id, item_id), access_token=access_token,
                 method='PUT', invalid_data={'title':'name not title'})
+            # test a logged out request (PUT)
+            self.make_logged_out_request(access_token=access_token, data=new_item,
+                url='/shoppinglists/{}/items/{}'.format(shoppinglist_id, item_id),\
+                method='PUT')  
+
         
     def test_delete_item(self):
         """
@@ -188,6 +200,10 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
             item_deleted = self.make_get_request(url='shoppinglists/{}/items/{}'.format(shoppinglist_id,
                 item_id), access_token=access_token)
             self.assertEqual(item_deleted.status_code, 404)
+            # test a logged out request (PUT)
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}/items/{}'.format(shoppinglist_id, item_id),\
+                method='DELETE')
 
 
 # Run the tests

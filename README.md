@@ -90,7 +90,23 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-3.  **Shoppinglists**
+3.  **Logout** 
+
+    endpoint:
+
+    ```
+    /auth/logout
+    ``` 
+
+    Methods = ['POST']
+
+    Authentication header:
+    ```
+    Authorization: Bearer <your access token>
+    ```
+
+
+4.  **Shoppinglists**
 
     endpoint:
     ```
@@ -99,7 +115,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
     Methods = ['POST', 'GET']
 
-    Authentication header
+    Authentication header:
     ```
     Authorization: Bearer <your access token>
     ```
@@ -112,7 +128,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-4.  **Single Shoppinglist**
+5.  **Single Shoppinglist**
 
     endpoint:
     ```
@@ -134,7 +150,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-5.  **Items of a Shoppinglist**
+6.  **Items of a Shoppinglist**
 
     endpoint:
     ```
@@ -157,7 +173,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-6.  **Single Item of Shoppinglist**
+7.  **Single Item of Shoppinglist**
 
     endpoint:
     ```
@@ -182,7 +198,5 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
 
 ### Endpoints in the pipeline
-1. ``` /auth/logout ```  
-    Methods = [POST]
-2. ``` /auth/reset-password ```
+1. ``` /auth/reset-password ```
     Methods = [POST]

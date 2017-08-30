@@ -149,6 +149,9 @@ class User(db.Model):
         try:
             # decode using the app SECRET
             payload = jwt.decode(token, current_app.config.get('SECRET'))
+            is_blacklisted = BlacklistToken.check_blacklist(token)
+            if is_blacklisted:
+                return 'You are already logged out'
             return payload['sub']
         except jwt.ExpiredSignatureError:
             # in case token is expired
@@ -336,3 +339,55 @@ class ShoppingItem(db.Model):
 
     def __repr__(self):
         return "<ShoppingItem: %s>" % self.name
+
+
+class BlacklistToken(db.Model):
+    """
+    Model for storing blacklisted tokens
+    """
+    __tablename__ = 'blacklist_tokens'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    token = db.Column(db.String(500), unique=True,nullable=False)
+    blacklisted_on = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, token):
+        if utilities.check_type(token, str):
+            self.token = token
+        self.blacklisted_on = datetime.now()
+
+    def save(self):
+        """
+        Saving to the database. After initialization, call this def
+        """
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return True
+        except Exception as e:
+            return str(e)
+
+    def delete(self):
+        """
+        Deleting a blacklisted token
+        """
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            return True
+        except Exception as e:
+            return str(e)
+
+    @staticmethod
+    def check_blacklist(token):
+        """
+        Check whether the token exists in the blacklist
+        """
+        if utilities.check_type(token, str):
+            result = BlacklistToken.query.filter_by(token=token).first()
+            if result:
+                return True
+            else:
+                return False
+
+    def __repr__(self):
+        return '<id: token: {}'.format(self.token)

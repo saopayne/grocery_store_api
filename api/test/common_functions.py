@@ -6,11 +6,12 @@ import json
 from app.models.shopping import User, ShoppingList, ShoppingItem
 from app import create_app, db
 
-class ShoppingParentTestClass(unittest.TestCase):
+
+class BaseTestClass(unittest.TestCase):
     """
-    The test class to be inherited from by tests for
-    ShoppingList and ShoppingItem
+    This is the parent class for all test classes
     """
+
     def setUp(self):
         """
         Set up the db, the app and some variables
@@ -19,36 +20,66 @@ class ShoppingParentTestClass(unittest.TestCase):
         self.client = self.app.test_client
         self.shoppinglist_data = {'title': 'Groceries and Home stuff'}
         self.shoppingitem_data = {'name':'fruit', 'quantity':5, 'unit': 'units'}
+        self.user_data = {
+            'username': 'johndoe',
+            'password': 'password',
+            'name': 'john doe',
+            'email': 'johndoe@example.com'
+        }
 
         with self.app.app_context():
+            # create tables in test db
+            db.session.close()
+            db.drop_all()
             db.create_all()
 
-    def register_user(self, username="rondoe", email="rondoe@email.com",
-                    password="password", name="Ron Doe"):
+    def logout_user(self, access_token=None):
         """
-        Helper function to register user
+        Helper method to logout a user
         """
-        with self.app.app_context():
-            user_data = {
-                'username': username,
-                'email': email,
-                'password': password,
-                'name': name
-            }
-            return self.client().post('/auth/register', 
-                            data=json.dumps(user_data))
+        if access_token:
+            with self.app.app_context():
+                response = self.client().post('/auth/logout',
+                headers=dict(Authorization="Bearer "+access_token))
+                return response
+        else:
+            raise ValueError('Invalid arguments for logout_user')
 
-    def login_user(self, username="rondoe", password="password"):
+
+    def register_user(self, user_data=None):
         """
-        Helper function to log in user
+        Helper method to register a user
         """
+        required_keys = ('username', 'name', 'password', 'email')
+        if not user_data or not isinstance(user_data, dict):
+            user_data = self.user_data
         with self.app.app_context():
-            user_data = {
-                'username': username,
-                'password': password
-            }
-            return self.client().post('/auth/login', 
-                    data=json.dumps(user_data))
+            # check if all the required keys are represented
+            if all(key in user_data for key in required_keys):
+                response = self.client().post('/auth/register', 
+                                data=json.dumps(user_data))
+                return response
+            else:
+                raise ValueError('Invalid arguments for register_user')
+
+    def login_user(self, user_data=None):
+        """
+        Helper method to login a user
+        """
+        required_keys = ('username', 'password')
+        if not user_data or not isinstance(user_data, dict):
+            user_data = self.user_data
+        with self.app.app_context():
+            # check if all the required keys are present
+            if all(key in user_data for key in required_keys):
+                login_details = dict(username=user_data['username'],
+                                    password=user_data['password'])
+                response = self.client().post('/auth/login', 
+                                        data=json.dumps(login_details))
+                return response
+            else:
+                raise ValueError('Invalid arguments for login_user')
+
 
     def make_request(self, method, *args, **kwargs):
         """
@@ -124,6 +155,55 @@ class ShoppingParentTestClass(unittest.TestCase):
             # after all the elif's if nothing matches, raise an error
             raise ValueError('The arguments are invalid for unauthorized request')
 
+    def make_logged_out_request(self, url, access_token, method, data=None):
+        """
+        Helper method to make logged out request
+        """
+        if isinstance(url, str) and isinstance(access_token, str) and isinstance(method, str):
+            post_or_put = ('POST', 'PUT')
+            get_or_delete = ('DELETE', 'GET')
+            self.logout_user(access_token=access_token)
+            if method in post_or_put:
+                # requires data
+                if not data or not isinstance(data, dict):
+                    raise ValueError('For POST or PUT the data in dict form \
+                        should be provided for make_logged_out_request')
+                with self.app.app_context():
+                    # make the request
+                    logged_out_response = self.make_request(method, url,
+                                    headers=dict(Authorization='Bearer ' + access_token),
+                                    data=json.dumps(data)
+                                    )
+            elif method in get_or_delete:
+                with self.app.app_context():
+                    # make the request
+                    logged_out_response = self.make_request(method, url,
+                                    headers=dict(Authorization='Bearer ' + access_token))
+            else:
+                raise ValueError('method can only be POST, PUT,\
+                         GET or DELETE in make_logged_out_request')
+            # the status code should be 401             
+            self.assertEqual(logged_out_response.status_code, 401)
+            self.assertEqual(json.loads(logged_out_response.data.decode())['message'],
+                            'You are already logged out')
+        else:
+            raise ValueError('Invalid arguments for make_logged_out_request')
+
+    def tearDown(self):
+        """
+        Do cleanup of test database
+        """
+        with self.app.app_context():
+            db.session.remove
+            db.drop_all()
+
+
+class ShoppingParentTestClass(BaseTestClass):
+    """
+    The test class to be inherited from by tests for
+    ShoppingList and ShoppingItem
+    """
+
     def get_default_token(self):
         """
         A helper method to register and login a user 
@@ -150,7 +230,11 @@ class ShoppingParentTestClass(unittest.TestCase):
                         headers=dict(Authorization='Bearer ' + access_token),
                         data=json.dumps(shoppinglist_data)
                         )
-            return json.loads(on_create.data.decode())['id'], on_create
+            response = json.loads(on_create.data.decode())
+            if 'id' in response.keys():
+                return json.loads(on_create.data.decode())['id'], on_create
+            else:
+                return on_create.status_code, response
             
     def make_get_request(self, url, access_token):
         """

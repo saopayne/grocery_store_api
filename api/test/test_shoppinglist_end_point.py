@@ -47,6 +47,10 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             # test for unauthorized access
             self.unauthorized_request(url='/shoppinglists/', method='POST',
             data=self.shoppinglist_data)
+            # test for already logged out / blacklisted token
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/'.format(shoppinglist_id), method='POST',
+                data=self.shoppinglist_data)
             
     def test_shoppinglist_edit(self):
         """
@@ -88,6 +92,10 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             self.unauthorized_request(url='/shoppinglists/{}'.\
                     format(shoppinglist_id), method='PUT',
                     data={'title': 'New title'})
+            # test for already logged out / blacklisted token
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}'.format(shoppinglist_id), method='PUT',
+                data=modified_list_data)
 
     def test_shoppinglist_delete(self):
         """
@@ -120,6 +128,9 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             on_delete = self.delete_shopping_list(access_token=access_token,
                 shoppinglist_id=shoppinglist_id)
             self.assertEqual(on_delete.status_code, 404)
+            # test a logged out request
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}'.format(shoppinglist_id), method='DELETE')
 
     def test_get_shoppinglist_by_id(self):
         """
@@ -144,6 +155,9 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             # attempt to retrieve the data without proper authentication
             self.unauthorized_request(url='/shoppinglists/{}'.\
                 format(shoppinglist_id), method='GET')
+            # test a logged out request
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}'.format(shoppinglist_id), method='GET')
 
     def test_get_all_shoppinglists(self):
         """
@@ -171,6 +185,9 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             self.assertIn(second_shopping_list_dict, all_shopping_lists_list)        
             # test unauthenticated request and return 403
             self.unauthorized_request(url='/shoppinglists/', method='GET')
+            # test a logged out request
+            self.make_logged_out_request(access_token=access_token, url='/shoppinglists/',
+            method='GET')
         
 
 # Run the tests
