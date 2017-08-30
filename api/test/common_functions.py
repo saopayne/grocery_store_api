@@ -189,6 +189,20 @@ class BaseTestClass(unittest.TestCase):
         else:
             raise ValueError('Invalid arguments for make_logged_out_request')
 
+    def get_default_token(self):
+        """
+        A helper method to register and login a user 
+        to get access token
+        """
+        with self.app.app_context():
+            self.register_user()
+            response = self.login_user()
+            try:
+                data_got = json.loads(response.data.decode())
+                return data_got['access_token']
+            except KeyError:
+                raise KeyError('"access_token" is not a key. This is the data %s' % data_got)
+
     def tearDown(self):
         """
         Do cleanup of test database
@@ -203,20 +217,6 @@ class ShoppingParentTestClass(BaseTestClass):
     The test class to be inherited from by tests for endpoints of
     ShoppingList and ShoppingItem
     """
-
-    def get_default_token(self):
-        """
-        A helper method to register and login a user 
-        to get access token
-        """
-        with self.app.app_context():
-            self.register_user()
-            response = self.login_user()
-            try:
-                data_got = json.loads(response.data.decode())
-                return data_got['access_token']
-            except KeyError:
-                raise KeyError('"access_token" is not a key. This is the data %s' % data_got)
 
     def create_shopping_list(self, access_token, shoppinglist_data=None):
         """

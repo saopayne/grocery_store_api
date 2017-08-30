@@ -14,6 +14,20 @@ class AuthTestClass(BaseTestClass):
     All tests for the auth blueprint
     """
 
+    def change_password(self, access_token=None, user_data=None):
+        """
+        Helper method to change password
+        """
+        with self.app.app_context():
+            if isinstance(access_token, str) and isinstance(user_data, dict):
+                response = self.client().post('/auth/reset-password',
+                            headers=dict(Authorization="Bearer " +  access_token),
+                            data=user_data)
+                return response
+            else:
+                raise TypeError('Invalid type of access_token and \
+                                user_data for change_password')
+
     def test_registration(self):
         """
         Test that an anonymous user can register successfully
@@ -89,14 +103,7 @@ class AuthTestClass(BaseTestClass):
         A registered user should be able to logout
         """
         with self.app.app_context():
-            # register the user
-            on_registration = self.register_user()
-            self.assertEqual(on_registration.status_code, 201)
-            # login and see user logs in
-            on_login = self.login_user()
-            self.assertEqual(on_login.status_code, 200)
-            login_response = json.loads(on_login.data.decode())
-            access_token = login_response['access_token']
+            access_token = self.get_default_token()
             # attempt to logout
             on_logout = self.logout_user(access_token=access_token)
             self.assertEqual(on_logout.status_code, 200)
@@ -113,5 +120,46 @@ class AuthTestClass(BaseTestClass):
             logout_response = json.loads(on_invalid_token_logout.data.decode())
             self.assertEqual(logout_response['message'], 
                 'Token is invalid. Try to login.')
+
+    def test_change_password(self):
+        """
+        A registered user can change their password
+        """
+        post_data = {
+            'old_password': 'password',
+            'new_password': 'new password'
+        }
+        with self.app.app_context():                
+            # get access code
+            access_token = self.get_default_token()
+            # try to change password with wrong access token
+            self.unauthorized_request(url='/auth/reset-password', method='POST',
+            data=post_data)
+            # try to change password with wrong input data
+            self.invalid_data_request(url='/auth/reset-password', method='POST',
+            invalid_data={'wrong_key':'there should be old_password, new_password'})
+            # change password
+            on_password_change = self.change_password(
+                                    access_token=access_token, user_data=post_data)
+            password_change_response = json.loads(on_password_change.data.decode())
+            self.assertEqual(on_password_change.status_code, 200)
+            self.assertEqual(password_change_response['message'], 'Password change successful')
+            # try to login with old password
+            on_old_login = self.login_user()
+            old_login_response = json.loads(on_old_login.data.decode())
+            self.assertEqual(on_old_login.status_code, 401)
+            self.assertEqual(old_login_response['message'], 'Invalid username or password. Try again')
+            # try to login with new password
+            user_data = {
+                'username': self.user_data['username'],
+                'password': data['new_password']
+            }
+            on_new_login = self.login_user(user_data=user_data)
+            new_login_response = json.loads(on_new_login.data.decode())
+            self.assertEqual(on_new_login.status_code, 200)
+            self.assertTrue(new_login_response['access_token'])
+            # try to change password after logging out
+            self.make_logged_out_request(url='/auth/reset-password', access_token=access_token,
+            method='POST', data={'old_password':post_data['new_password'], 'new_password':'a new pass'})
 
 # there is need for changing password tests
