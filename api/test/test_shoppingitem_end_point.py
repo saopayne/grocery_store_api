@@ -8,6 +8,8 @@ import json
 from app.models.shopping import User, ShoppingList, ShoppingItem
 from .common_functions import ShoppingParentTestClass
 
+# add tests for when user is logged out
+
 
 class ShoppingItemEndPointTest(ShoppingParentTestClass):
     """

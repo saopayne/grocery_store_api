@@ -8,9 +8,9 @@ from app import create_app, db
 from app.models.shopping import User, ShoppingList, ShoppingItem
 
 
-class ShoppingListModelTest(unittest.TestCase):
+class ShoppingItemModelTest(unittest.TestCase):
     """
-    All tests on the ShoppingList model plus a user object
+    All tests on the ShoppingItem model
     """
     def setUp(self):
         """
