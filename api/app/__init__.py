@@ -42,6 +42,8 @@ def create_app(config_name):
                 # user is authenticated so get the user
                 user = User.query.get(user_id)
                 return user
+            elif user_id == 'You are already logged out':
+                return user_id
             else:
                 return None
 
@@ -52,6 +54,8 @@ def create_app(config_name):
         """
         unauthorized_data = {'message':'You do not have the appropriate permissions'} # 403
         user = get_authenticated_user(request)
+        if isinstance(user, str):
+            return make_response(jsonify({'message': user})), 401
         if not user:
             # User is not authenticated
             return make_response(jsonify(unauthorized_data)), 403
@@ -109,6 +113,9 @@ def create_app(config_name):
         unauthorized_data = {'message':'You do not have the appropriate permissions'} # 403
         non_existent_object = {'message': 'The shopping list does not exist'}
         user = get_authenticated_user(request)
+        if isinstance(user, str):
+            # Has logged out
+            return make_response(jsonify({'message': user})), 401
         if not user:
             # User is not authenticated
             return make_response(jsonify(unauthorized_data)), 403
@@ -175,6 +182,9 @@ def create_app(config_name):
         unauthorized_data = {'message':'You do not have the appropriate permissions'} # 403
         non_existent_shoppinglist = {'message': 'The shopping list does not exist'}
         user = get_authenticated_user(request)
+        if isinstance(user, str):
+            # Has logged out
+            return make_response(jsonify({'message': user})), 401
         if not user:
             # User is not authenticated
             return make_response(jsonify(unauthorized_data)), 403
@@ -247,6 +257,9 @@ def create_app(config_name):
         non_existent_shoppinglist = {'message': 'The shopping list does not exist'}
         non_existent_shoppingitem = {'message': 'The shopping item does not exist'}
         user = get_authenticated_user(request)
+        if isinstance(user, str):
+            # Has logged out
+            return make_response(jsonify({'message': user})), 401
         if not user:
             # User is not authenticated
             return make_response(jsonify(unauthorized_data)), 403

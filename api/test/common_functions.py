@@ -155,6 +155,40 @@ class BaseTestClass(unittest.TestCase):
             # after all the elif's if nothing matches, raise an error
             raise ValueError('The arguments are invalid for unauthorized request')
 
+    def make_logged_out_request(self, url, access_token, method, data=None):
+        """
+        Helper method to make logged out request
+        """
+        if isinstance(url, str) and isinstance(access_token, str) and isinstance(method, str):
+            post_or_put = ('POST', 'PUT')
+            get_or_delete = ('DELETE', 'GET')
+            self.logout_user(access_token=access_token)
+            if method in post_or_put:
+                # requires data
+                if not data or not isinstance(data, dict):
+                    raise ValueError('For POST or PUT the data in dict form \
+                        should be provided for make_logged_out_request')
+                with self.app.app_context():
+                    # make the request
+                    logged_out_response = self.make_request(method, url,
+                                    headers=dict(Authorization='Bearer ' + access_token),
+                                    data=json.dumps(data)
+                                    )
+            elif method in get_or_delete:
+                with self.app.app_context():
+                    # make the request
+                    logged_out_response = self.make_request(method, url,
+                                    headers=dict(Authorization='Bearer ' + access_token))
+            else:
+                raise ValueError('method can only be POST, PUT,\
+                         GET or DELETE in make_logged_out_request')
+            # the status code should be 401             
+            self.assertEqual(logged_out_response.status_code, 401)
+            self.assertEqual(json.loads(logged_out_response.data.decode())['message'],
+                            'You are already logged out')
+        else:
+            raise ValueError('Invalid arguments for make_logged_out_request')
+
     def tearDown(self):
         """
         Do cleanup of test database
@@ -196,7 +230,11 @@ class ShoppingParentTestClass(BaseTestClass):
                         headers=dict(Authorization='Bearer ' + access_token),
                         data=json.dumps(shoppinglist_data)
                         )
-            return json.loads(on_create.data.decode())['id'], on_create
+            response = json.loads(on_create.data.decode())
+            if 'id' in response.keys():
+                return json.loads(on_create.data.decode())['id'], on_create
+            else:
+                return on_create.status_code, response
             
     def make_get_request(self, url, access_token):
         """
