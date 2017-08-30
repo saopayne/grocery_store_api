@@ -351,8 +351,16 @@ class BlacklistToken(db.Model):
     blacklisted_on = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, token):
+        if isinstance(token, bytes):
+            # convert the bytes to string
+            token = token.decode('utf-8')
         if utilities.check_type(token, str):
-            self.token = token
+            # attempt to decode it
+            user_id = User.decode_token(token)
+            if not isinstance(user_id, str):
+                self.token = token
+            else:
+                raise ValueError('The token should be valid')
         self.blacklisted_on = datetime.now()
 
     def save(self):
@@ -361,17 +369,6 @@ class BlacklistToken(db.Model):
         """
         try:
             db.session.add(self)
-            db.session.commit()
-            return True
-        except Exception as e:
-            return str(e)
-
-    def delete(self):
-        """
-        Deleting a blacklisted token
-        """
-        try:
-            db.session.delete(self)
             db.session.commit()
             return True
         except Exception as e:

@@ -22,7 +22,8 @@ def create_app(config_name):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
-    from app.models.shopping import User, ShoppingList, ShoppingItem
+    from app.models.shopping import User, ShoppingList, \
+        ShoppingItem, BlacklistToken
 
     def get_authenticated_user(request):
         """

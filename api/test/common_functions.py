@@ -3,13 +3,13 @@ This file holds all the functions common in the tests files
 """
 import unittest
 import json
-from app.models.shopping import User, ShoppingList, ShoppingItem
+from app.models.shopping import User, ShoppingList, ShoppingItem, BlacklistToken
 from app import create_app, db
 
 
 class BaseTestClass(unittest.TestCase):
     """
-    This is the parent class for all test classes
+    This is the parent class for all test classes of endpoints
     """
 
     def setUp(self):
@@ -200,7 +200,7 @@ class BaseTestClass(unittest.TestCase):
 
 class ShoppingParentTestClass(BaseTestClass):
     """
-    The test class to be inherited from by tests for
+    The test class to be inherited from by tests for endpoints of
     ShoppingList and ShoppingItem
     """
 
@@ -247,3 +247,32 @@ class ShoppingParentTestClass(BaseTestClass):
                 return response
         else:
             raise ValueError('Invalid arguments for make_get_request')
+
+
+class BaseModelTestClass(unittest.TestCase):
+    """
+    Parent class for all model test classes
+    """
+    def setUp(self):
+        """
+        Initialize the app db
+        """
+        self.app = create_app(config_name='testing')
+
+        with self.app.app_context():
+            db.create_all()
+            self.user = User('John Doe', 'john@example.com',
+                                 'password', 'johndoe') 
+            self.shopping_list = ShoppingList('Groceries',
+                        'family daily grocery shopping list', owner=self.user)
+            self.shopping_item = ShoppingItem('fruit', 5, 'units',
+                                    parent_list=self.shopping_list)
+                        # create tables in test db
+
+    def tearDown(self):
+        """
+        Do cleanup of test database
+        """
+        with self.app.app_context():
+            db.session.remove
+            db.drop_all()
