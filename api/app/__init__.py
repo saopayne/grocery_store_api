@@ -24,30 +24,8 @@ def create_app(config_name):
 
     from app.models.shopping import User, ShoppingList, \
         ShoppingItem, BlacklistToken
-
-    def get_authenticated_user(request):
-        """
-        Helper function to get the authenticated user based on 
-        the token that is passed
-        """
-        auth_header = request.headers.get('Authorization')
-        if not auth_header:
-            return None
-        access_token = auth_header.split(" ")[1]
-        user = None
-        if not access_token:
-            return None
-        else:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                # user is authenticated so get the user
-                user = User.query.get(user_id)
-                return user
-            elif user_id == 'You are already logged out':
-                return user_id
-            else:
-                return None
-
+    from app.auth.views import get_authenticated_user
+    
     @app.route('/shoppinglists/', methods=['POST', 'GET'])
     def shoppinglists():
         """
