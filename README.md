@@ -81,6 +81,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     ```
     /auth/login
     ``` 
+    Methods = ['POST']
         
     example POST payload :
     ```json
@@ -105,8 +106,29 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     Authorization: Bearer <your access token>
     ```
 
+4.  **Reset Password** 
 
-4.  **Shoppinglists**
+    endpoint:
+
+    ```
+    /auth/reset-password
+    ``` 
+    Methods = ['POST']
+
+    Authentication header:
+    ```
+    Authorization: Bearer <your access token>
+    ```
+        
+    example POST payload :
+    ```json
+    {
+        "old_password": "the old password",
+        "new_password": "the new password"
+    }
+    ```
+
+5.  **Shoppinglists**
 
     endpoint:
     ```
@@ -128,7 +150,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-5.  **Single Shoppinglist**
+6.  **Single Shoppinglist**
 
     endpoint:
     ```
@@ -150,7 +172,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-6.  **Items of a Shoppinglist**
+7.  **Items of a Shoppinglist**
 
     endpoint:
     ```
@@ -173,7 +195,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     }
     ```
 
-7.  **Single Item of Shoppinglist**
+8.  **Single Item of Shoppinglist**
 
     endpoint:
     ```
@@ -195,8 +217,3 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
         "unit": "tonnes"
     }
     ```
-
-
-### Endpoints in the pipeline
-1. ``` /auth/reset-password ```
-    Methods = [POST]
