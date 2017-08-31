@@ -22,8 +22,8 @@ class AuthTestClass(BaseTestClass):
             if isinstance(access_token, str) and isinstance(user_data, dict):
                 response = self.client().post('/auth/reset-password',
                             headers=dict(Authorization="Bearer " +  access_token),
-                            data=user_data)
-                return response
+                            data=json.dumps(user_data))
+                return response.status_code, json.loads(response.data.decode())
             else:
                 raise TypeError('Invalid type of access_token and \
                                 user_data for change_password')
@@ -137,13 +137,13 @@ class AuthTestClass(BaseTestClass):
             data=post_data)
             # try to change password with wrong input data
             self.invalid_data_request(url='/auth/reset-password', method='POST',
-            invalid_data={'wrong_key':'there should be old_password, new_password'})
+                invalid_data={'wrong_key':'there should be old_password, new_password'},
+                access_token=access_token)
             # change password
             on_password_change = self.change_password(
                                     access_token=access_token, user_data=post_data)
-            password_change_response = json.loads(on_password_change.data.decode())
-            self.assertEqual(on_password_change.status_code, 200)
-            self.assertEqual(password_change_response['message'], 'Password change successful')
+            self.assertEqual(on_password_change[0], 200)
+            self.assertEqual(on_password_change[1]['message'], 'Password reset successful')
             # try to login with old password
             on_old_login = self.login_user()
             old_login_response = json.loads(on_old_login.data.decode())
@@ -152,7 +152,7 @@ class AuthTestClass(BaseTestClass):
             # try to login with new password
             user_data = {
                 'username': self.user_data['username'],
-                'password': data['new_password']
+                'password': post_data['new_password']
             }
             on_new_login = self.login_user(user_data=user_data)
             new_login_response = json.loads(on_new_login.data.decode())
@@ -162,4 +162,3 @@ class AuthTestClass(BaseTestClass):
             self.make_logged_out_request(url='/auth/reset-password', access_token=access_token,
             method='POST', data={'old_password':post_data['new_password'], 'new_password':'a new pass'})
 
-# there is need for changing password tests

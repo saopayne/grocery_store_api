@@ -91,7 +91,7 @@ def create_app(config_name):
                     return make_response(jsonify(
                         {'message':'The data you sent was in the wrong structure'})), 400
             else:
-                return make_response(jsonify({'message':'no data was sent'}))
+                return make_response(jsonify({'message':'no data was sent'})), 400
 
         elif request.method == 'GET' and user:
             # view all the shoppinglists
