@@ -26,6 +26,25 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
         else:
             raise ValueError('Invalid arguments for delete_shopping_list')
 
+    def create_many_shoppinglists(self, titles, access_token):
+        """
+        Helper method to create many shoppinglists
+        """
+        if isinstance(access_token, str) and isinstance(titles, list) or isinstance(titles, set):
+            with self.app.app_context():
+                # a dictionary of dictionaries for each shopping list
+                shoppinglists = {}
+                for title in set(titles):
+                    shoppinglist_details = self.create_shopping_list(
+                                        access_token=access_token, 
+                                        shoppinglist_data={'title': title})
+                    self.assertEqual(shoppinglist_details[1].status_code, 201)
+                    shoppinglists[title] = json.loads(shoppinglist_details[1].data.decode())
+                return shoppinglists
+        else:
+            raise TypeError('titles should be a list or set of string titles. \
+                            access_token should be a string')
+
     def test_shoppinglist_create(self):
         """
         Test that a ShoppingList object can be \
@@ -188,26 +207,6 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             # test a logged out request
             self.make_logged_out_request(access_token=access_token, url='/shoppinglists/',
             method='GET')
-
-    def create_many_shoppinglists(self, titles, access_token):
-        """
-        Helper method to create many shoppinglists
-        """
-        if isinstance(access_token, str) and isinstance(titles, list) or isinstance(titles, set):
-            with self.app.app_context():
-                # a dictionary of dictionaries for each shopping list
-                shoppinglists = {}
-                for title in set(titles):
-                    shoppinglist_details = self.create_shopping_list(
-                                        access_token=access_token, 
-                                        shoppinglist_data={'title': title})
-                    self.assertEqual(shoppinglist_details[1].status_code, 201)
-                    shoppinglists[title] = json.loads(shoppinglist_details[1].data.decode())
-                return shoppinglists
-        else:
-            raise TypeError('titles should be a list or set of string titles. \
-                            access_token should be a string')
-
 
     def test_search_shoppinglists_by_title(self):
         """

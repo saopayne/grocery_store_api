@@ -135,6 +135,12 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
      /shoppinglists/
     ``` 
 
+    Search by title:
+
+    ```
+    /shoppinglists/?q=shoppinglist_title_you_want
+    ```
+
     Methods = ['POST', 'GET']
 
     Authentication header:
@@ -148,11 +154,6 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
         "title": "your new shoppinglist title",
         "description": "whatever description"
     }
-    ```
-    Search by title:
-
-    ```
-    /shoppinglists/?q=shoppinglist_title_you_want
     ```
 
     Example response to GET:
@@ -207,6 +208,10 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     ```
      /shoppinglists/<id>/items/
     ``` 
+    Search by name:
+    ```
+    /shoppinglists/<id>/items/?q=whatever_name_you_want
+    ```
 
     Methods = ['POST', 'GET']
 
