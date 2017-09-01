@@ -193,9 +193,7 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
         """
         Helper method to create many shoppinglists
         """
-        if not isinstance(access_token, str):
-            raise TypeError('access_token should be a string not %s' % str(type(access_token)))
-        if isinstance(titles, list) or isinstance(titles, set):
+        if isinstance(access_token, str) and isinstance(titles, list) or isinstance(titles, set):
             with self.app.app_context():
                 # a dictionary of dictionaries for each shopping list
                 shoppinglists = {}
@@ -207,7 +205,8 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
                     shoppinglists[title] = json.loads(shoppinglist_details[1].data.decode())
                 return shoppinglists
         else:
-            raise TypeError('titles should be a list or set of string titles')
+            raise TypeError('titles should be a list or set of string titles. \
+                            access_token should be a string')
 
 
     def test_search_shoppinglists_by_title(self):
