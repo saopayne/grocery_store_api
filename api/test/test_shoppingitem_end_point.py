@@ -47,6 +47,25 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
         else:
             raise ValueError('Invalid arguments for delete_shopping_item')
 
+    def create_many_shoppingitems(self, shoppinglist_id, names, access_token):
+        """
+        Helper method to create many shoppingitems in a shopping list
+        """
+        if isinstance(access_token, str) and isinstance(names, list) or \
+        isinstance(names, set) and isinstance(shoppinglist_id, int):
+            with self.app.app_context():
+                # a dictionary of dictionaries for each shopping item
+                shoppingitems = {}
+                for name in set(names):
+                    shoppingitem_details = self.create_shopping_item(access_token=access_token,
+                    shoppinglist_id=shoppinglist_id, shoppingitem_data={'name':name})
+                    self.assertEqual(shoppingitem_details[1].status_code, 201)
+                    shoppingitems[name] = json.loads(shoppingitem_details[1].data.decode())
+                return shoppingitems
+        else:
+            raise TypeError('names should be a list or set of string names. \
+                            access_token should be a string and shoppinglist_id an int')
+
     def test_view_all_items(self):
         """
         All items of a shopping list can be viewed
@@ -204,6 +223,31 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
             self.make_logged_out_request(access_token=access_token,
                 url='/shoppinglists/{}/items/{}'.format(shoppinglist_id, item_id),\
                 method='DELETE')
+
+    def test_search_shoppingitems_by_name(self):
+        """
+        ShoppingItems can be searched for by use of query param q
+        """
+        with self.app.app_context():
+            # create a shoppinglist
+            access_token = self.get_default_token()
+            shoppinglist_id, on_create = self.create_shopping_list(access_token)
+            self.assertEqual(on_create.status_code, 201)
+            # add items to the shoppinglist
+            names = ['guavas', 'prada shoes', 'linen', 'iphone', 'woofers',
+            'beddings', 'spices', 'icing sugar']
+            shoppingitems = self.create_many_shoppingitems(shoppinglist_id=shoppinglist_id,
+            names=names, access_token=access_token)
+            # search for them using the q query param
+            for name in names:
+                response = self.make_get_request(url='/shoppinglists/{}/items/?q={}'\
+                .format(shoppinglist_id, name), access_token=access_token)
+                list_returned = json.loads(response.data.decode())
+                # the results returned should be less than all the available 
+                # shoppingitems
+                self.assertLess(len(list_returned), len(names))
+                # the shoppingitem of the said name should be in the results
+                self.assertIn(shoppingitems[name], list_returned)                
 
 
 # Run the tests
