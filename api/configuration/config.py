@@ -12,6 +12,8 @@ class Config(object):
     SECRET = os.getenv('SECRET')
     CSRF_ENABLED = True
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
+    LISTS_PER_PAGE = os.getenv('LISTS_PER_PAGE') or 6
+    ITEMS_PER_PAGE = os.getenv('ITEMS_PER_PAGE') or 10
 
 
 class DevelopmentConfig(Config):
