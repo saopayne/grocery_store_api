@@ -105,7 +105,10 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
             self.assertIn(second_item_object, all_items)
             # check for unauthenticated requests
             self.unauthorized_request(url='/shoppinglists/{}/items/'.format(shoppinglist_id),
-            method='GET')
+                method='GET')
+            # check for logged out requests
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}/items/'.format(shoppinglist_id), method='GET')            
 
     def test_view_and_add_single_item(self):
         """
@@ -247,7 +250,14 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
                 # shoppingitems
                 self.assertLess(len(list_returned), len(names))
                 # the shoppingitem of the said name should be in the results
-                self.assertIn(shoppingitems[name], list_returned)                
+                self.assertIn(shoppingitems[name], list_returned)   
+            # check for unauthenticated requests
+            self.unauthorized_request(url='/shoppinglists/{}/items/?q={}'\
+                .format(shoppinglist_id, names[0]), method='GET')
+            # check for logged out requests
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}/items/?q={}'.format(shoppinglist_id, names[0]),
+                method='GET')                       
 
 
 # Run the tests

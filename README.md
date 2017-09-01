@@ -140,6 +140,10 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     ```
     /shoppinglists/?q=shoppinglist_title_you_want
     ```
+    Example GET Pagination:
+    ```
+    /shoppinglists/?page=3&limit=4
+    ```
 
     Methods = ['POST', 'GET']
 

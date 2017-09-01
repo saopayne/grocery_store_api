@@ -74,12 +74,27 @@ def create_app(config_name):
         elif request.method == 'GET' and user:
             # view all the shoppinglists
             search_title = request.args.get('q') or None
-            if not search_title:
-                shoppinglists = ShoppingList.query.filter_by(owner=user).all()   
-            else:             
+            limit = request.args.get('limit') or None
+            page = request.args.get('page') or None
+            shoppinglists_query = ShoppingList.query.filter_by(owner=user)  
+            if search_title:             
                 search = '%'+search_title+'%'
-                shoppinglists = ShoppingList.query.filter_by(owner=user).\
-                                filter(ShoppingList.title.ilike(search)).all()
+                shoppinglists_query = shoppinglists_query.filter(ShoppingList.title.ilike(search))
+            shoppinglists = shoppinglists_query.all()
+            if limit or page:
+                # get the defaults if any of the args is None
+                limit = limit or app.config['LISTS_PER_PAGE']
+                page = page or 1
+                # try to convert them to integers
+                try:
+                    limit = int(limit)
+                    page = int(page)
+                except ValueError:
+                    return make_response(jsonify({'message':
+                'limit and page query parameters should be integers'})), 400
+                # return an empty list if no shoppinglists are found
+                shoppinglists = shoppinglists_query.paginate(page, limit, False).items
+
             response = []
             for each_list in shoppinglists:
                 obj = {
@@ -89,6 +104,7 @@ def create_app(config_name):
                 }
                 response.append(obj)
             return make_response(jsonify(response)), 200
+
 
     @app.route('/shoppinglists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
     def single_shoppinglist(id, **kwargs):
@@ -216,7 +232,7 @@ def create_app(config_name):
                     return make_response(jsonify(
                         {'message':'The data you sent was in the wrong structure'})), 400
             else:
-                return make_response(jsonify({'message':'no data was sent'}))
+                return make_response(jsonify({'message':'no data was sent'})), 400
 
         if request.method == 'GET' and user:
             # get all the items that belong to the list
