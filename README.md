@@ -216,6 +216,10 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     ```
     /shoppinglists/<id>/items/?q=whatever_name_you_want
     ```
+    Example GET Pagination:
+    ```
+    /shoppinglists/<id>/items/?page=3&limit=4
+    ```
 
     Methods = ['POST', 'GET']
 

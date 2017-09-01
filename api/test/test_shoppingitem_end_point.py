@@ -257,7 +257,68 @@ class ShoppingItemEndPointTest(ShoppingParentTestClass):
             # check for logged out requests
             self.make_logged_out_request(access_token=access_token,
                 url='/shoppinglists/{}/items/?q={}'.format(shoppinglist_id, names[0]),
-                method='GET')                       
+                method='GET')       
+
+    def test_paginate_shoppingitems(self):
+        """
+        Shopping list items can be paginated using query params page, limit (per_page)
+        """
+        with self.app.app_context():
+            # get the default access token
+            access_token = self.get_default_token()
+            # create shoppinglist
+            shoppinglist_id, on_create = self.create_shopping_list(access_token)
+            self.assertEqual(on_create.status_code, 201)
+            # add items to the shoppinglist
+            names = ['guavas', 'prada shoes', 'linen', 'iphone', 'woofers',
+            'beddings', 'spices', 'icing sugar']
+            shoppingitems = self.create_many_shoppingitems(shoppinglist_id=shoppinglist_id,
+            names=names, access_token=access_token)
+            # get all the shopping list items without the query params
+            shoppingitems = self.make_get_request(url='/shoppinglists/{}/items/'.format(
+                shoppinglist_id), access_token=access_token)
+            shoppingitems_list = json.loads(shoppingitems.data.decode())
+            # try to get the shopping list items with query params
+            limits = (1,2,3,4)
+            for limit in limits:
+                page = 1
+                cummulative_list = []
+                while ((page*limit) - len(names) < limit):
+                    response = self.make_get_request(url='/shoppinglists/{}/items/?page={}&limit={}'.
+                               format(shoppinglist_id, page, limit), access_token=access_token)
+                    page += 1
+                    cummulative_list += json.loads(response.data.decode())
+                    # the length of list returned should be less or equal to the limit
+                    self.assertLessEqual(len(json.loads(response.data.decode())), limit)
+                # the cummulative list obtained from all the pages should be equal to list
+                # of shoppinglists got without the limit and page query params
+                self.assertListEqual(shoppingitems_list, cummulative_list)
+ 
+            # when only page is provided, the default limit in config will be used
+            response = self.make_get_request(url='/shoppinglists/{}/items/?page={}'.\
+                                format(shoppinglist_id, 1), access_token=access_token)
+            self.assertLessEqual(len(json.loads(response.data.decode())), 
+                                int(self.app.config['ITEMS_PER_PAGE']))
+            # when only limit is provided, the default page=1 will be used
+            response_without_page = self.make_get_request(url='/shoppinglists/{}/items/?limit={}'.\
+                                format(shoppinglist_id, limits[0]), access_token=access_token)
+            response_with_page1 = self.make_get_request(url='/shoppinglists/{}/items/?limit={}&page=1'.\
+                                format(shoppinglist_id, limits[0]), access_token=access_token)
+            self.assertEqual(json.loads(response_without_page.data.decode()),
+                            json.loads(response_with_page1.data.decode()))
+            # An error message will be sent in case limit or page are not int
+            wrong_type_response = self.make_get_request(
+                url='/shoppinglists/{}/items/?limit={}&page={}'.format(shoppinglist_id,
+                'limit_as_string', 45.90), access_token=access_token)
+            self.assertEqual(wrong_type_response.status_code, 400)
+            self.assertEqual(json.loads(wrong_type_response.data.decode())['message'],
+                            'limit and page query parameters should be integers')
+            # test unauthenticated request and return 403
+            self.unauthorized_request(url='/shoppinglists/{}/items/?limit=1&page=1'.format(shoppinglist_id),
+                method='GET')
+            # test a logged out request
+            self.make_logged_out_request(access_token=access_token,
+                url='/shoppinglists/{}/items/?limit=1&page=1'.format(shoppinglist_id), method='GET')
 
 
 # Run the tests

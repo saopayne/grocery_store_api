@@ -236,13 +236,28 @@ def create_app(config_name):
 
         if request.method == 'GET' and user:
             # get all the items that belong to the list
+            # search and pagination
             search_name = request.args.get('q') or None
-            if not search_name:
-                items = shoppinglist.get_shopping_items()
-            else:
+            limit = request.args.get('limit') or None
+            page = request.args.get('page') or None
+            shoppingitems_query = ShoppingItem.query.filter_by(parent_list=shoppinglist)  
+            if search_name:             
                 search = '%'+search_name+'%'
-                items = ShoppingItem.query.filter_by(parent_list=shoppinglist).\
-                                filter(ShoppingItem.name.ilike(search)).all()                
+                shoppingitems_query = shoppingitems_query.filter(ShoppingItem.name.ilike(search))
+            items = shoppingitems_query.all()
+            if limit or page:
+                # get the defaults if any of the args is None
+                limit = limit or app.config['ITEMS_PER_PAGE']
+                page = page or 1
+                # try to convert them to integers
+                try:
+                    limit = int(limit)
+                    page = int(page)
+                except ValueError:
+                    return make_response(jsonify({'message':
+                'limit and page query parameters should be integers'})), 400
+                # return an empty list if no shoppinglists are found
+                items = shoppingitems_query.paginate(page, limit, False).items
             response = []
             for item in items:
                 obj = {

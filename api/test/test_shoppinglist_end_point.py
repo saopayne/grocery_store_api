@@ -7,8 +7,6 @@ import unittest
 import json
 from app.models.shopping import User, ShoppingList
 from .common_functions import ShoppingParentTestClass
-# get the configurations
-from configuration.config import APP_CONFIG
 
 
 class ShoppingListEndPointTest(ShoppingParentTestClass):
@@ -273,7 +271,7 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
  
             # when only page is provided, the default limit in config will be used
             response = self.make_get_request(url='/shoppinglists/?page={}'.\
-                                format(page), access_token=access_token)
+                                format(1), access_token=access_token)
             self.assertLessEqual(len(json.loads(response.data.decode())), 
                                 int(self.app.config['LISTS_PER_PAGE']))
             # when only limit is provided, the default page=1 will be used
