@@ -73,7 +73,11 @@ def create_app(config_name):
 
         elif request.method == 'GET' and user:
             # view all the shoppinglists
+            search_title = request.args.get('q') or None
             shoppinglists = ShoppingList.query.filter_by(owner=user).all()
+            if search_title:
+                search = '%'+search_title+'%'
+                shoppinglists = ShoppingList.query.filter(ShoppingList.title.ilike(search)).all()
             response = []
             for each_list in shoppinglists:
                 obj = {

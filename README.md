@@ -60,12 +60,12 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
 1. **Register user**
 
-    endpoint:
+    Endpoint:
     ```
     /auth/register
     ``` 
         
-    example POST payload :
+    Example POST payload :
     ```json
     {
         "username": "any-you-want",
@@ -76,14 +76,14 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     ```
 2.  **Login** 
 
-    endpoint:
+    Endpoint:
 
     ```
     /auth/login
     ``` 
     Methods = ['POST']
         
-    example POST payload :
+    Example POST payload :
     ```json
     {
         "username": "any-you-want",
@@ -93,7 +93,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
 3.  **Logout** 
 
-    endpoint:
+    Endpoint:
 
     ```
     /auth/logout
@@ -108,7 +108,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
 4.  **Reset Password** 
 
-    endpoint:
+    Endpoint:
 
     ```
     /auth/reset-password
@@ -120,7 +120,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     Authorization: Bearer <your access token>
     ```
         
-    example POST payload :
+    Example POST payload :
     ```json
     {
         "old_password": "the old password",
@@ -130,7 +130,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
 
 5.  **Shoppinglists**
 
-    endpoint:
+    Endpoint:
     ```
      /shoppinglists/
     ``` 
@@ -142,17 +142,39 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     Authorization: Bearer <your access token>
     ```
         
-    example POST payload :
+    Example POST payload :
     ```json
     {
         "title": "your new shoppinglist title",
         "description": "whatever description"
     }
     ```
+    Search by title:
+
+    ```
+    /shoppinglists/?q=shoppinglist_title_you_want
+    ```
+
+    Example response to GET:
+    ```json
+    [
+        {
+            "title":"whatever title",
+            "description":"whatever description"
+        },
+        {
+            "title":" another title",
+            "description":"another description"
+        },
+
+        ...
+
+    ]
+    ```
 
 6.  **Single Shoppinglist**
 
-    endpoint:
+    Endpoint:
     ```
      /shoppinglists/<id>
     ``` 
@@ -164,17 +186,24 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     Authorization: Bearer <your access token>
     ```
         
-    example PUT payload :
+    Example PUT payload :
     ```json
     {
         "title": "your modified shoppinglist title",
         "description": "whatever new description"
     }
     ```
+    Example response to GET:
+    ```json
+    {
+        "title":"whatever title",
+        "description":"whatever description"
+    }
+    ```
 
 7.  **Items of a Shoppinglist**
 
-    endpoint:
+    Endpoint:
     ```
      /shoppinglists/<id>/items/
     ``` 
@@ -186,7 +215,7 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     Authorization: Bearer <your access token>
     ```
         
-    example POST payload :
+    Example POST payload :
     ```json
     {
         "name": "name of new item",
@@ -194,10 +223,28 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
         "unit": "baskets"
     }
     ```
+    Example response to GET:
+    ```json
+    [
+        {
+            "name":"whatever name",
+            "quantity":8,
+            "unit": "whatever units"
+        },
+        {
+            "name":"baking flour",
+            "quantity":8,
+            "unit": "kg"
+        },
+        
+        ...
+
+    ]
+    ```
 
 8.  **Single Item of Shoppinglist**
 
-    endpoint:
+    Endpoint:
     ```
      /shoppinglists/<id>/items/<item_id>
     ``` 
@@ -209,11 +256,19 @@ The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.
     Authorization: Bearer <your access token>
     ```
         
-    example PUT payload :
+    Example PUT payload :
     ```json
     {
         "name": "modified name of item",
         "quantity": 500,
         "unit": "tonnes"
+    }
+    ```
+    Example response to GET:
+    ```json
+    {
+            "name":"baking flour",
+            "quantity":8,
+            "unit": "kg"
     }
     ```

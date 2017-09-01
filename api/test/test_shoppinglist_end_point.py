@@ -188,7 +188,50 @@ class ShoppingListEndPointTest(ShoppingParentTestClass):
             # test a logged out request
             self.make_logged_out_request(access_token=access_token, url='/shoppinglists/',
             method='GET')
-        
+
+    def create_many_shoppinglists(self, titles, access_token):
+        """
+        Helper method to create many shoppinglists
+        """
+        if isinstance(access_token, str) and isinstance(titles, list) or isinstance(titles, set):
+            with self.app.app_context():
+                # a dictionary of dictionaries for each shopping list
+                shoppinglists = {}
+                for title in set(titles):
+                    shoppinglist_details = self.create_shopping_list(
+                                        access_token=access_token, 
+                                        shoppinglist_data={'title': title})
+                    self.assertEqual(shoppinglist_details[1].status_code, 201)
+                    shoppinglists[title] = json.loads(shoppinglist_details[1].data.decode())
+                return shoppinglists
+        else:
+            raise TypeError('titles should be a list or set of string titles. \
+                            access_token should be a string')
+
+
+    def test_search_shoppinglists_by_title(self):
+        """
+        A shoppinglist can be search for by title using in query param q
+        """
+        with self.app.app_context():
+            # get the default access token
+            access_token = self.get_default_token()
+            # create many shopping lists
+            titles = ['food', 'books', 'clothes', 'groceries', 'fruits', 'beverages',
+            'movies', 'music', 'gadgets']
+            shoppinglists = self.create_many_shoppinglists(titles=titles, 
+                            access_token=access_token)
+            # search them title
+            for title in titles:
+                response = self.make_get_request(url='/shoppinglists/?q='+title, 
+                            access_token=access_token)
+                list_returned = json.loads(response.data.decode())
+                # the results returned should be less than all the available 
+                # shoppinglists
+                self.assertLess(len(list_returned), len(titles))
+                # the shoppinglist of the said title should be in the results
+                self.assertIn(shoppinglists[title], list_returned)
+            
 
 # Run the tests
 if __name__ == "__main__":
