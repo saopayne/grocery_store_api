@@ -1,6 +1,8 @@
 Views shoppinglists
 Returns all shopping lists owned by the logged in user
 ---
+tags:
+  - "Shopping list"
 produces:
   - "application/json"
 parameters:

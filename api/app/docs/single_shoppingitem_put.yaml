@@ -1,6 +1,8 @@
 Updates a shopping list item
 Updates the details of the shopping list item whose id is item_id
 ---
+tags:
+  - "Shopping list item"
 consumes:
   - "application/json"
 produces:

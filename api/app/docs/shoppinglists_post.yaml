@@ -1,6 +1,8 @@
 Adds a New shopping list
 Creates a new shopping list for teh logged in user
 ---
+tags:
+  - "Shopping list"
 consumes:
   - "application/json"
 produces:

@@ -1,6 +1,8 @@
 Deletes a Shopping list
 Deletes the shopping list whose id is in the path
 ---
+tags:
+  - "Shopping list"
 produces:
   - "application/json"
 parameters:

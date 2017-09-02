@@ -21,6 +21,47 @@ def create_app(config_name):
     app = Flask(__name__)
     app.config.from_object(APP_CONFIG[config_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SWAGGER'] = {
+        'title': 'ShoppingList',
+        'description': "This project is part of the [Andela Fellowship](https://andela.com/)\
+    Bootcamp.\n\nThe ShoppingList app is a web application meant to help users keep\
+    track of their shopping items easily. \nThis is a REST API built in python using\
+    Flask.\n\nIt also enables users to share such lists with other people for example\
+    if the shopper and the list compiler are different people.\
+    \n\nThe host is 'https://shoppinglist-rest-andela.herokuapp.com'\
+    \n\nThe Github repo at 'https://github.com/Tinitto/ShoppingListAPI",
+        'basePath': '/',
+        'version': '1.0.0',
+        'contact': {
+                    'responsibleOrganization': 'Andela',
+                    'responsibleDeveloper': 'Martin Ahindura',
+                    'email': 'team@sopherapps.com',
+                    'url': 'https://andela.com/',
+                    },
+        'schemes': [
+                        'http',
+                        'https'
+                    ],
+        'license': {
+            'name': 'MIT',
+            'url': 'https://github.com/Tinitto/ShoppingListAPI/blob/master/LICENSE'
+        },
+        'tags': [
+            {
+                'name': 'Shopping list',
+                'description': 'A list of Shopping lists'
+            },
+            {
+                'name': 'Shopping list item',
+                'description': 'An item of a Shopping list'
+            },
+            {
+                'name': 'User',
+                'description': 'Operations about a user'
+            },
+        ]
+        
+    }
     db.init_app(app)
     swagger = Swagger(app)
 

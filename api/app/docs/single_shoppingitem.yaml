@@ -1,6 +1,8 @@
 Views a single item of a shopping list
 Returns a single item whose id is the item_id in the url path
 ---
+tags:
+  - "Shopping list item"
 produces:
   - "application/json"
 parameters:

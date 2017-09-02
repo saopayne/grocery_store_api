@@ -1,6 +1,8 @@
 Deletes an item in a Shopping list
 Deletes an item of specified by item_id in url
 ---
+tags:
+  - "Shopping list item"
 produces:
   - "application/json"
 parameters:
@@ -63,4 +65,3 @@ definitions:
       message:
         type: "string"
         default: "You are already logged out"
-        
