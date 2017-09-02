@@ -1,6 +1,8 @@
 Adds a new item to a Shopping list
 Adds a new item to the shopping list whose id is in the url path
 ---
+tags:
+  - "Shopping list item"
 consumes:
   - "application/json"
 produces:

@@ -1,6 +1,8 @@
 Updates a Shopping list
 Updates the details of the shopping list whose id is in the path
 ---
+tags:
+  - "Shopping list"
 consumes:
   - "application/json"
 produces:
