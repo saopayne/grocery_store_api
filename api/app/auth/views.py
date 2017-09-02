@@ -8,6 +8,7 @@ from flask.views import MethodView
 from flask import make_response, request, jsonify
 from app.models.shopping import User, BlacklistToken
 import json
+from flasgger import swag_from
 
     
 def get_authenticated_user(request):
@@ -36,6 +37,7 @@ def get_authenticated_user(request):
 class RegistrationView(MethodView):
     """This class registers a new user at /auth/register"""
 
+    @swag_from('docs/registration.yaml', methods=['POST'])
     def post(self):
         """Handle POST request for this view."""
 
@@ -87,6 +89,7 @@ class LoginView(MethodView):
     This view handles user login and access token generation at auth/login
     """
 
+    @swag_from('docs/login.yaml', methods=['POST'])
     def post(self):
         """Handle POST request for this view."""
 
@@ -134,6 +137,8 @@ class LogoutView(MethodView):
     """
     This view handles logout at /auth/logout
     """
+
+    @swag_from('docs/logout.yaml', methods=['POST'])
     def post(self):
         # get the atuhorization header
         auth_header = request.headers.get('Authorization')
@@ -179,6 +184,8 @@ class ResetPasswordView(MethodView):
     """
     View for resetting password on /auth/reset-password
     """
+
+    @swag_from('docs/password_reset.yaml', methods=['POST'])
     def post(self):
         """
         View method for resetting password via a POST
