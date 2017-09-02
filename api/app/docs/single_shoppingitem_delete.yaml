@@ -1,0 +1,66 @@
+Deletes an item in a Shopping list
+Deletes an item of specified by item_id in url
+---
+produces:
+  - "application/json"
+parameters:
+  - name: "Authorization"
+    in: "header"
+    required: true
+    description: "JWT token authentication e.g. 'Bearer token' which token is provided on login"
+    type: "string"
+  - name: "id"
+    in: "path"
+    description: "Shopping list id where the item is"
+    required: true
+    type: "integer"
+    format: "int64"
+  - name: "item_id"
+    in: "path"
+    description: "Shopping list item id to delete"
+    required: true
+    type: "integer"
+    format: "int64"
+responses:
+  403:
+    description: "You do not have the appropriate permissions"
+    schema:
+      $ref: "#/definitions/unauthorized"
+  401:
+    description: "You are logged out"
+    schema:
+      $ref: "#/definitions/logged_out"
+  200:
+    description: "Successfully deleted the shopping list item"
+    schema:
+      $ref: "#/definitions/deleted_item"
+  404:
+    description: "The shopping item does not exist"
+    schema:
+      $ref: "#definitions/non_existent_item"
+definitions:
+  non_existent_item:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "The shopping item does not exist"
+  deleted_item:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "Shopping item successfully deleted"
+  unauthorized:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "You do not have the appropriate permissions"
+  logged_out:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "You are already logged out"
+        

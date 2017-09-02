@@ -3,6 +3,7 @@
 
 from flask import Flask, request, jsonify, abort, make_response
 from flask_sqlalchemy import SQLAlchemy
+from flasgger import Swagger, swag_from
 
 
 # get the configurations
@@ -21,15 +22,18 @@ def create_app(config_name):
     app.config.from_object(APP_CONFIG[config_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+    swagger = Swagger(app)
 
     from app.models.shopping import User, ShoppingList, \
         ShoppingItem, BlacklistToken
     from app.auth.views import get_authenticated_user
-    
+
     @app.route('/shoppinglists/', methods=['POST', 'GET'])
+    @swag_from('docs/shoppinglists.yaml', methods=['GET'])
+    @swag_from('docs/shoppinglists_post.yaml', methods=['POST'])
     def shoppinglists():
         """
-        Add a new shoppinglist or view all shoppinglists
+        For viewing and adding shopping lists
         """
         unauthorized_data = {'message':'You do not have the appropriate permissions'} # 403
         user = get_authenticated_user(request)
@@ -107,6 +111,9 @@ def create_app(config_name):
 
 
     @app.route('/shoppinglists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+    @swag_from('docs/single_shoppinglist.yaml', methods=['GET'])
+    @swag_from('docs/single_shoppinglist_put.yaml', methods=['PUT'])
+    @swag_from('docs/single_shoppinglist_delete.yaml', methods=['DELETE'])
     def single_shoppinglist(id, **kwargs):
         """
         This route handles the view, edit and deletion of a shoppinglist
@@ -176,6 +183,8 @@ def create_app(config_name):
             return make_response(jsonify(response)), 200
 
     @app.route('/shoppinglists/<int:id>/items/', methods=['GET', 'POST'])
+    @swag_from('docs/shoppingitems.yaml', methods=['GET'])
+    @swag_from('docs/shoppingitems_post.yaml', methods=['POST'])
     def all_items_of_shoppinglist(id):
         """
         Route for viewing and and adding items to a shoppinglist
@@ -271,6 +280,9 @@ def create_app(config_name):
 
     @app.route('/shoppinglists/<int:id>/items/<int:item_id>',
      methods=['GET', 'PUT', 'DELETE'])
+    @swag_from('docs/single_shoppingitem.yaml', methods=['GET'])
+    @swag_from('docs/single_shoppingitem_put.yaml', methods=['PUT'])
+    @swag_from('docs/single_shoppingitem_delete.yaml', methods=['DELETE'])
     def single_shoppingitem(id, item_id):
         """
         The route for editting, deleting, viewing a single shoppingitem

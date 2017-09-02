@@ -1,5 +1,5 @@
 # ShoppingListAPI [![Build Status](https://travis-ci.org/Tinitto/ShoppingListAPI.png?branch=master)](https://travis-ci.org/Tinitto/ShoppingListAPI)
-This is the RESTful API for the ShoppingList App, the app that allows you to keep and share shopping lists
+This is the RESTful API for the ShoppingList App, the app that allows you to keep and share shopping lists. Read the [docs](https://shoppinglist-rest-andela.herokuapp.com/apidocs/).
 
 ## About
 This project is part of the [Andela Fellowship](https://andela.com/) Bootcamp.
@@ -55,6 +55,8 @@ It also enables users to share such lists with other people for example if the s
 
 ## Demo
 The demo app on Heroku can be found [https://shoppinglist-rest-andela.herokuapp.com](https://shoppinglist-rest-andela.herokuapp.com)
+
+Read the [docs](https://shoppinglist-rest-andela.herokuapp.com/apidocs/).
 
 ### Current endpoints
 

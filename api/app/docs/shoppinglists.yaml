@@ -1,0 +1,84 @@
+Views shoppinglists
+Returns all shopping lists owned by the logged in user
+---
+produces:
+  - "application/json"
+parameters:
+  - name: "Authorization"
+    in: "header"
+    required: true
+    type: "string"
+    description: "JWT token authentication e.g. 'Bearer token' which token is provided on login"
+  - name: "q"
+    in: "query"
+    description: "Search shopping lists by title"
+    type: "string"
+  - name: "page"
+    in: "query"
+    description: "Pagination page for list"
+    type: "integer"
+  - name: "limit"
+    in: "query"
+    description: "Pagination number of shopping lists per page"
+    type: "integer"
+responses:
+  403:
+    description: "You do not have the appropriate permissions"
+    schema:
+      $ref: "#/definitions/unauthorized"
+  401:
+    description: "You are logged out"
+    schema:
+      $ref: "#/definitions/logged_out"
+  200:
+    description: "A list of shopping lists belonging to the logged in user"
+    schema:
+      $ref: "#/definitions/shoppinglists"
+  400:
+    description: "The query parameters 'limit' and 'page' are of invalid type"
+    schema:
+      $ref: "#/definitions/invalid_query_type"
+securityDefinitions:
+    Bearer:
+        type: apiKey
+        name: Authorization
+        in: header
+security:
+  Bearer: []
+definitions:
+  shoppinglist:
+    type: "object"
+    required:
+      - "title"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+        example: "Groceries"
+      description:
+        type: "string"
+        example: "Groceries for home"
+  shoppinglists:
+    type: "array"
+    items:
+      $ref: "#/definitions/shoppinglist"
+  invalid_query_type:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "limit and page query parameters should be integers"
+  unauthorized:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "You do not have the appropriate permissions"
+  logged_out:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "You are already logged out"
