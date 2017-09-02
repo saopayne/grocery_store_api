@@ -51,7 +51,7 @@ class RegistrationView(MethodView):
             # check if user exists
             user = User.query.filter_by(username=received_data['username']).first()
         else:
-            return make_response(jsonify({'message':'no data was sent'}))
+            return make_response(jsonify({'message':'no data was sent'})), 400
         # if not yet registered, attempt to register the user
         if not user:
             try:
