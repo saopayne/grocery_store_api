@@ -1,0 +1,80 @@
+Adds a New shopping list
+Creates a new shopping list for teh logged in user
+---
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+parameters:
+  - name: "Authorization"
+    in: "header"
+    required: true
+    description: "JWT token authentication e.g. 'Bearer token' which token is provided on login"
+    type: "string"
+  - in: "body"
+    name: "body"
+    description: "The new shopping list's details"
+    required: true
+    schema:
+      $ref: "#/definitions/shoppinglist-post"
+responses:
+  403:
+    description: "You do not have the appropriate permissions"
+    schema:
+      $ref: "#/definitions/unauthorized"
+  401:
+    description: "You are logged out"
+    schema:
+      $ref: "#/definitions/logged_out"
+  201:
+    description: "Successfully created the shopping list"
+    schema:
+      $ref: "#/definitions/shoppinglist"
+  400:
+    description: "The data you sent was in the wrong structure"
+    schema:
+      $ref: "#/definitions/invalid_data"
+definitions:
+  shoppinglist-post:
+    type: "object"
+    required:
+    - "title"
+    properties:
+      title:
+        type: "string"
+        example: "Groceries"
+      description:
+        type: "string"
+        example: "Groceries for home"
+  shoppinglist:
+    type: "object"
+    required:
+      - "title"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      title:
+        type: "string"
+        example: "Groceries"
+      description:
+        type: "string"
+        example: "Groceries for home"
+  invalid_data:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "The data you sent was in the wrong structure"
+  unauthorized:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "You do not have the appropriate permissions"
+  logged_out:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        default: "You are already logged out"
