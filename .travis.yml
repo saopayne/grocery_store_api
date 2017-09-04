@@ -3,7 +3,9 @@ python:
   - "3.5"
 install:
   - pip install -r requirements.txt
+  - "pip install coveralls"
 env:
+  - COVERAGE_FILE=".coverage"
   - FLASK_APP="api/run.py"
   - SECRET="some-fancy long development secret"
   - APP_SETTINGS="development"
@@ -16,3 +18,5 @@ before_script:
   - psql -c "grant all privileges on database shopping_test_db to startups;" -U postgres
   - psql -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO startups;' -U postgres
 script:  sh -c 'cd ./api/ python manage.py test'
+after_success:
+  sh -c 'cd ./api/ && coveralls'
