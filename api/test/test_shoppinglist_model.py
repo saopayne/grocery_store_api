@@ -4,8 +4,12 @@ This includes the tests for the ShoppingList model
 
 
 import unittest
+try:
+    from .common_functions import BaseModelTestClass
+except (ImportError, SystemError):
+    from common_functions import BaseModelTestClass
 from app.models.shopping import ShoppingList, ShoppingItem
-from .common_functions import BaseModelTestClass
+
 
 class ShoppingListModelTest(BaseModelTestClass):
     """
