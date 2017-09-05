@@ -1,4 +1,4 @@
-# ShoppingListAPI [![Build Status](https://travis-ci.org/Tinitto/ShoppingListAPI.png?branch=master)](https://travis-ci.org/Tinitto/ShoppingListAPI) [![Coverage Status](https://coveralls.io/repos/github/Tinitto/ShoppingListAPI/badge.svg?branch=master)](https://coveralls.io/github/Tinitto/ShoppingListAPI?branch=master)
+# ShoppingListAPI [![Build Status](https://travis-ci.org/Tinitto/ShoppingListAPI.png?branch=master)](https://travis-ci.org/Tinitto/ShoppingListAPI) [![Coverage Status](https://coveralls.io/repos/github/Tinitto/ShoppingListAPI/badge.svg)](https://coveralls.io/github/Tinitto/ShoppingListAPI)
 
 This is the RESTful API for the ShoppingList App, the app that allows you to keep and share shopping lists. 
 
