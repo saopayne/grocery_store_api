@@ -4,7 +4,10 @@ Module for testing the Blacklist model
 
 import unittest
 from app.models.shopping import BlacklistToken, ShoppingList
-from .common_functions import BaseModelTestClass
+try:
+    from .common_functions import BaseModelTestClass
+except (ImportError, SystemError):
+    from common_functions import BaseModelTestClass
 
 
 class BlacklistModelTest(BaseModelTestClass):

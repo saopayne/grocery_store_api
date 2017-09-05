@@ -5,7 +5,10 @@ This includes the tests for the ShoppingItem model
 
 import unittest
 from app.models.shopping import ShoppingItem
-from .common_functions import BaseModelTestClass
+try:
+    from .common_functions import BaseModelTestClass
+except (ImportError, SystemError):
+    from common_functions import BaseModelTestClass
 
 
 class ShoppingItemModelTest(BaseModelTestClass):

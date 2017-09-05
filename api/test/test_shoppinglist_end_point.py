@@ -6,7 +6,10 @@ to the ShoppingList model
 import unittest
 import json
 from app.models.shopping import User, ShoppingList
-from .common_functions import ShoppingParentTestClass
+try:
+    from .common_functions import ShoppingParentTestClass
+except (ImportError, SystemError):
+    from common_functions import ShoppingParentTestClass
 
 
 class ShoppingListEndPointTest(ShoppingParentTestClass):

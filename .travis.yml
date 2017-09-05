@@ -3,11 +3,9 @@ python:
   - "3.5"
 install:
   - pip install -r requirements.txt
+  - "pip install coveralls"
 env:
-  - FLASK_APP="api/run.py"
-  - SECRET="some-fancy long development secret"
-  - APP_SETTINGS="development"
-  - TEST_DATABASE_URL="postgresql://postgres@localhost:5432/shopping_test_db"
+  - COVERAGE_FILE=".coverage" FLASK_APP="api/run.py" SECRET="some-fancy long development secret" APP_SETTINGS="testing" TEST_DATABASE_URL="postgresql://postgres@localhost:5432/shopping_test_db"
 services:
   - postgresql
 before_script:
@@ -15,4 +13,6 @@ before_script:
   - psql -c "CREATE USER startups WITH PASSWORD 'pass';" -U postgres
   - psql -c "grant all privileges on database shopping_test_db to startups;" -U postgres
   - psql -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO startups;' -U postgres
-script:  sh -c 'cd ./api/ python manage.py test'
+script:  sh -c 'cd ./api/ && python manage.py test --coverage && coverage report'
+after_success:
+  sh -c 'cd ./api/ && coveralls'

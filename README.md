@@ -1,4 +1,5 @@
-# ShoppingListAPI [![Build Status](https://travis-ci.org/Tinitto/ShoppingListAPI.png?branch=master)](https://travis-ci.org/Tinitto/ShoppingListAPI)
+# ShoppingListAPI [![Build Status](https://travis-ci.org/Tinitto/ShoppingListAPI.png?branch=master)](https://travis-ci.org/Tinitto/ShoppingListAPI) [![Coverage Status](https://coveralls.io/repos/github/Tinitto/ShoppingListAPI/badge.svg?branch=master)](https://coveralls.io/github/Tinitto/ShoppingListAPI?branch=master)
+
 This is the RESTful API for the ShoppingList App, the app that allows you to keep and share shopping lists. 
 
 **Read the [API docs](https://shoppinglist-rest-andela.herokuapp.com/apidocs/)**.
@@ -51,7 +52,9 @@ It also enables users to share such lists with other people for example if the s
 
 4. run command in the folder ShoppingListAPI
 
-    ``` sh -c 'cd ./api/ && coverage run -m --source=app unittest discover test && coverage report' ```
+    ``` 
+    sh -c 'cd ./api/ && python manage.py test --coverage && coverage report' 
+    ```
 
 5. Observe the output in your terminal
 
