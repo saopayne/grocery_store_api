@@ -6,7 +6,11 @@ This module is for testing the auth blueprint in app
 import unittest
 import json
 from app import create_app, db
-from .common_functions import BaseTestClass
+try:
+    from .common_functions import BaseTestClass
+except (ImportError, SystemError):
+    from common_functions import BaseTestClass
+
 
 
 class AuthTestClass(BaseTestClass):
@@ -162,3 +166,6 @@ class AuthTestClass(BaseTestClass):
             self.make_logged_out_request(url='/auth/reset-password', access_token=access_token,
             method='POST', data={'old_password':post_data['new_password'], 'new_password':'a new pass'})
 
+
+if __name__ == "__main__":
+    unittest.main()

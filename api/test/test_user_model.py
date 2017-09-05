@@ -5,7 +5,10 @@ This includes the tests for the user model
 
 import unittest
 from app.models.shopping import User
-from .common_functions import BaseModelTestClass
+try:
+    from .common_functions import BaseModelTestClass
+except (ImportError, SystemError):
+    from common_functions import BaseModelTestClass
 
 
 class UserModelTest(BaseModelTestClass):
