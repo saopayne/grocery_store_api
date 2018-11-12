@@ -2,53 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c564d390-68fc-47f7-b433-4b9bf1b54cb5" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/designs/RideCo.png" />
-      <change beforePath="$PROJECT_DIR$/.travis.yml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change beforePath="$PROJECT_DIR$/api/app/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/auth/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/auth/docs/login.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/auth/docs/logout.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/auth/docs/password_reset.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/auth/docs/registration.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/auth/views.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/shoppingitems.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/shoppingitems_post.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/shoppinglists.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/shoppinglists_post.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/single_shoppingitem.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/single_shoppingitem_delete.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/single_shoppingitem_put.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/single_shoppinglist.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/single_shoppinglist_delete.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/docs/single_shoppinglist_put.yaml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/models/__init__.py" afterPath="$PROJECT_DIR$/app/authentication/__init__.py" />
-      <change beforePath="$PROJECT_DIR$/api/app/models/shopping.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/app/models/utilities.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/configuration/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/configuration/config.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/manage.py" afterPath="$PROJECT_DIR$/manage.py" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/README" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/alembic.ini" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/env.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/script.py.mako" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/versions/3e89f92a7baf_.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/migrations/versions/8424811bcb74_.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/run.py" afterPath="$PROJECT_DIR$/run.py" />
-      <change beforePath="$PROJECT_DIR$/api/test/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/__main__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/common_functions.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_auth.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_blacklist_model.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_shoppingitem_end_point.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_shoppingitem_model.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_shoppinglist_end_point.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_shoppinglist_model.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_user_model.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/api/test/test_utilities.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/designs/ShoppingListApp_class_UML.png" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
+      <change beforePath="$PROJECT_DIR$/configuration/config.py" afterPath="$PROJECT_DIR$/configuration/config.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -86,7 +40,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Procfile" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Procfile" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Procfile">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
@@ -118,11 +72,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="config.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/configuration/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="484">
-              <caret line="33" column="53" lean-forward="false" selection-start-line="33" selection-start-column="53" selection-end-line="33" selection-end-column="53" />
+            <state relative-caret-position="499">
+              <caret line="34" column="66" lean-forward="true" selection-start-line="34" selection-start-column="66" selection-end-line="34" selection-end-column="66" />
               <folding />
             </state>
           </provider>
@@ -379,13 +333,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.267" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.267" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24404761" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="5.952381E-4" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -708,28 +663,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3865">
-          <caret line="567" column="14" lean-forward="true" selection-start-line="567" selection-start-column="14" selection-end-line="567" selection-end-column="14" />
-          <folding>
-            <element signature="e#55#84#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="193" lean-forward="false" selection-start-line="7" selection-start-column="193" selection-end-line="7" selection-end-column="193" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/configuration/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="33" column="53" lean-forward="false" selection-start-line="33" selection-start-column="53" selection-end-line="33" selection-end-column="53" />
           <folding />
         </state>
       </provider>
@@ -748,6 +685,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="13" lean-forward="false" selection-start-line="0" selection-start-column="13" selection-end-line="0" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3865">
+          <caret line="567" column="14" lean-forward="true" selection-start-line="567" selection-start-column="14" selection-end-line="567" selection-end-column="14" />
+          <folding>
+            <element signature="e#55#84#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configuration/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="34" column="66" lean-forward="true" selection-start-line="34" selection-start-column="66" selection-end-line="34" selection-end-column="66" />
           <folding />
         </state>
       </provider>
