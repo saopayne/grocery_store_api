@@ -60,3 +60,4 @@ urllib3==1.22
 Werkzeug==0.12.2
 wrapt==1.10.11
 WTForms==2.1
+flask-cors==3.0.7
