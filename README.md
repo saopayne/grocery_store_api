@@ -1,17 +1,6 @@
-# ShoppingListAPI [![Build Status](https://travis-ci.org/Tinitto/ShoppingListAPI.png?branch=master)](https://travis-ci.org/Tinitto/ShoppingListAPI) [![Coverage Status](https://coveralls.io/repos/github/Tinitto/ShoppingListAPI/badge.svg)](https://coveralls.io/github/Tinitto/ShoppingListAPI)
+# RideCo Grocery Project API
 
-This is the RESTful API for the ShoppingList App, the app that allows you to keep and share shopping lists. 
-
-**Read the [API docs](https://shoppinglist-rest-andela.herokuapp.com/apidocs/)**.
-
-## About
-This project is part of the [Andela Fellowship](https://andela.com/) Bootcamp.
-
-The ShoppingList app is a web application meant to help users keep track of their shopping items easily. 
-
-This is a REST API built in python using Flask.
-
-It also enables users to share such lists with other people for example if the shopper and the list compiler are different people.
+This is the RESTful API for the Grocery App, the app that allows you to make and edit grocery list. 
 
 ## Dependencies
 1. Flask version 0.12+
@@ -21,7 +10,7 @@ It also enables users to share such lists with other people for example if the s
 ## How to run flask application
 1. Clone the repository to your computer
 2. Activate your virtualenv
-3. In your terminal, enter the directory ShoppingListAPI
+3. In your terminal, enter the directory Rideco_grocery_api
 4. run the following command to install the app package into your virtualenv (Don't forget the dot at the end)
 
     ``` pip install -r requirements.txt ```
@@ -59,7 +48,6 @@ It also enables users to share such lists with other people for example if the s
 5. Observe the output in your terminal
 
 ## API Documentation
-The documentation on Heroku can be found at [https://shoppinglist-rest-andela.herokuapp.com/apidocs/](https://shoppinglist-rest-andela.herokuapp.com/apidocs/)
 
 Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
 
@@ -135,21 +123,21 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     }
     ```
 
-5.  **Shoppinglists**
+5.  **Grocery lists**
 
     Endpoint:
     ```
-     /shoppinglists/
+     /grocerylists/
     ``` 
 
     Search by title:
 
     ```
-    /shoppinglists/?q=shoppinglist_title_you_want
+    /grocerylists/?q=placeholder
     ```
     Example GET Pagination:
     ```
-    /shoppinglists/?page=3&limit=4
+    /grocerylists/?page=3&limit=4
     ```
 
     Methods = ['POST', 'GET']
@@ -162,7 +150,7 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     Example POST payload :
     ```json
     {
-        "title": "your new shoppinglist title",
+        "title": "your new grocery list title",
         "description": "whatever description"
     }
     ```
@@ -184,11 +172,11 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     ]
     ```
 
-6.  **Single Shoppinglist**
+6.  **Single Grocery List**
 
     Endpoint:
     ```
-     /shoppinglists/<id>
+     /grocerylists/<id>
     ``` 
 
     Methods = ['PUT', 'GET', 'DELETE']
@@ -201,7 +189,7 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     Example PUT payload :
     ```json
     {
-        "title": "your modified shoppinglist title",
+        "title": "your modified grocery list title",
         "description": "whatever new description"
     }
     ```
@@ -213,19 +201,19 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     }
     ```
 
-7.  **Items of a Shoppinglist**
+7.  **Items in a Grocery list**
 
     Endpoint:
     ```
-     /shoppinglists/<id>/items/
+     /grocerylists/<id>/items/
     ``` 
     Search by name:
     ```
-    /shoppinglists/<id>/items/?q=whatever_name_you_want
+    /grocerylists/<id>/items/?q=whatever_name_you_want
     ```
     Example GET Pagination:
     ```
-    /shoppinglists/<id>/items/?page=3&limit=4
+    /grocerylists/<id>/items/?page=3&limit=4
     ```
 
     Methods = ['POST', 'GET']
@@ -262,11 +250,11 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     ]
     ```
 
-8.  **Single Item of Shoppinglist**
+8.  **Single Item of Grocerylists**
 
     Endpoint:
     ```
-     /shoppinglists/<id>/items/<item_id>
+     /grocerylists/<id>/items/<item_id>
     ``` 
 
     Methods = ['PUT', 'GET', 'DELETE']

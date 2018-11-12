@@ -1,6 +1,5 @@
 alembic==0.9.5
 aniso8601==1.2.1
--e git+https://github.com/Tinitto/ShoppingList.git@e0063c61b564db4d363d097a43daefec8cd6f338#egg=app&subdirectory=flask_app
 asciinema==1.4.0
 astroid==1.5.3
 Babel==2.5.0
