@@ -24,7 +24,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SECRET = "development secret"
     SQLALCHEMY_DATABASE_URI = os.getenv('RIDECO_DATABASE_URL') or \
-                              "mysql://b1587976a48c40:11f54bd2@us-cdbr-iron-east-01.cleardb.net/heroku_93575e569e5df3b?reconnect=true"
+                              "mysql://b1587976a48c40:11f54bd2@us-cdbr-iron-east-01.cleardb.net/heroku_93575e569e5df3b"
                               # "mysql://root:saopayne@localhost:3306/rideco_grocery_db"
 
 
@@ -33,7 +33,7 @@ class TestingConfig(Config):
     SECRET = "development secret"
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.getenv('RIDECO_TEST_DATABASE_URL') or \
-                              "mysql://b1587976a48c40:11f54bd2@us-cdbr-iron-east-01.cleardb.net/heroku_93575e569e5df3b?reconnect=true"
+                              "mysql://b1587976a48c40:11f54bd2@us-cdbr-iron-east-01.cleardb.net/heroku_93575e569e5df3b"
                               # "mysql://root:saopayne@localhost:3306/rideco_grocery_test_db"
 
 
