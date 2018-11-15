@@ -4,8 +4,8 @@ This is the RESTful API for the Grocery App, the app that allows you to make and
 
 ## Dependencies
 1. Flask version 0.12+
-2. Python version 3.5+
-3. Postgresql 9.6+
+2. Python version 3.6
+3. MySQL 5.7
 
 ## How to run flask application
 1. Clone the repository to your computer
@@ -39,7 +39,7 @@ This is the RESTful API for the Grocery App, the app that allows you to make and
 
     ``` pip install coverage```
 
-4. run command in the folder ShoppingListAPI
+4. run command in the folder Grocery List API
 
     ``` 
     sh -c 'cd ./api/ && python manage.py test --coverage && coverage report' 
@@ -49,7 +49,8 @@ This is the RESTful API for the Grocery App, the app that allows you to make and
 
 ## API Documentation
 
-Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
+
+Base URL: https://guarded-brook-31463.herokuapp.com
 
 ### Current endpoints
 
@@ -85,45 +86,7 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
         "password": "password"
     }
     ```
-
-3.  **Logout** 
-
-    Endpoint:
-
-    ```
-    /auth/logout
-    ``` 
-
-    Methods = ['POST']
-
-    Authentication header:
-    ```
-    Authorization: Bearer <your access token>
-    ```
-
-4.  **Reset Password** 
-
-    Endpoint:
-
-    ```
-    /auth/reset-password
-    ``` 
-    Methods = ['POST']
-
-    Authentication header:
-    ```
-    Authorization: Bearer <your access token>
-    ```
-        
-    Example POST payload :
-    ```json
-    {
-        "old_password": "the old password",
-        "new_password": "the new password"
-    }
-    ```
-
-5.  **Grocery lists**
+3.  **Grocery lists**
 
     Endpoint:
     ```
@@ -172,7 +135,7 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     ]
     ```
 
-6.  **Single Grocery List**
+4.  **Single Grocery List**
 
     Endpoint:
     ```
@@ -201,7 +164,7 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     }
     ```
 
-7.  **Items in a Grocery list**
+5.  **Items in a Grocery list**
 
     Endpoint:
     ```
@@ -250,7 +213,7 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     ]
     ```
 
-8.  **Single Item of Grocerylists**
+6.  **Single Item of Grocerylists**
 
     Endpoint:
     ```
@@ -269,7 +232,7 @@ Base URL of the demo is https://shoppinglist-rest-andela.herokuapp.com/.
     {
         "name": "modified name of item",
         "quantity": 500,
-        "unit": "tonnes"
+        "unit": "NGN"
     }
     ```
     Example response to GET:
