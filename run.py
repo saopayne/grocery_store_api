@@ -10,7 +10,7 @@ config_name = os.getenv('APP_SETTINGS') or 'development'
 app = create_app(config_name)
 
 with app.app_context():
-    # db.create_all()
+    db.create_all()
     # Create a mock user to use for the demo
     user = User.query.filter_by(id=1).first()
     grocery_list = GroceryList.query.filter_by(id=1).first()
