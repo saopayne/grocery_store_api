@@ -42,7 +42,7 @@ This is the RESTful API for the Grocery App, the app that allows you to make and
 4. run command in the folder Grocery List API
 
     ``` 
-    sh -c 'cd ./api/ && python manage.py test --coverage && coverage report' 
+    sh -c 'python manage.py test --coverage && coverage report' 
     ```
 
 5. Observe the output in your terminal
